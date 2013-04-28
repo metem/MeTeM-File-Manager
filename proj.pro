@@ -14,9 +14,18 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    fileinfoex.cpp
+    fileinfoex.cpp \
+    duplicatesfinder.cpp \
+    filesfinder.cpp \
+    finderdialog.cpp \
+    textformatter.cpp
 
 HEADERS  += mainwindow.h \
-    fileinfoex.h
+    fileinfoex.h \
+    duplicatesfinder.h \
+    filesfinder.h \
+    finderdialog.h \
+    textformatter.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    finderdialog.ui

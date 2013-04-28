@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "fileinfoex.h"
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -25,11 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     filesModel->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
     filesModel->setRootPath(QDir::rootPath());
     ui->tableView->setModel(filesModel);
-
-   /* FileInfoEx MyFile("/media/Filmy 3/Legenda.mkv");
-    QByteArray barr = MyFile.GetSHA1();
-    QString myQString(barr.toHex());
-    ui->lEPath->setText(myQString);*/
 }
 
 MainWindow::~MainWindow()
