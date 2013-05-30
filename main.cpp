@@ -5,11 +5,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
- //   MainWindow w;
- //   w.show();
+    MainWindow w;
+    w.show();
 
-    FinderDialog fd("/media/D/temp/", true);
-    fd.show();
+//    FinderDialog fd("/media/D/Programowanie",true);
+//    fd.show();
 
     return a.exec();
 }

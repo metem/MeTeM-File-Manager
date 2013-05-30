@@ -18,14 +18,19 @@ SOURCES += main.cpp\
     duplicatesfinder.cpp \
     filesfinder.cpp \
     finderdialog.cpp \
-    textformatter.cpp
+    textformatter.cpp \
+    directorytree.cpp \
+    filemodel.cpp
 
 HEADERS  += mainwindow.h \
     fileinfoex.h \
     duplicatesfinder.h \
     filesfinder.h \
     finderdialog.h \
-    textformatter.h
+    textformatter.h \
+    directorytree.h \
+    filemodel.h
 
 FORMS    += mainwindow.ui \
-    finderdialog.ui
+    finderdialog.ui \
+    directorytree.ui

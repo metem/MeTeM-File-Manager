@@ -16,6 +16,11 @@ bool compareName(const FileInfoEx& a, const FileInfoEx& b)
     return a.fileName() < b.fileName();
 }
 
+void DuplicatesFinder::SetMethods(Methods flags)
+{
+    method = flags;
+}
+
 void DuplicatesFinder::ReduceList(QList<FileInfoEx> &list)
 {
     bool isDup = false; //previous element is duplicate or not
@@ -58,67 +63,99 @@ void DuplicatesFinder::FixID(QList<FileInfoEx> &list)
     }
 }
 
-QList<FileInfoEx> DuplicatesFinder::Find(Methods mtd, bool subDirs)
+void DuplicatesFinder::Search()
 {
+    delete fileList;
     QFileInfoList lst = FilesFinder::Find(subDirs, QDir::Files | QDir::Hidden | QDir::System);
-    QList<FileInfoEx> result = FileInfoEx::ConvertList(lst);
-    if (result.count() == 0) return result;
+    fileList = new QList<FileInfoEx>(FileInfoEx::ConvertList(lst));
+    if (fileList->count() == 0) this->thread()->quit();
+
+    int progress = 0;
 
     char counter;
 
-    if (mtd & DuplicatesFinder::Size)
+    if (method & DuplicatesFinder::Size)
     {
-        qSort(result.begin(), result.end(), compareSize);
+        emit ProgressChanged(0);
+        qSort(fileList->begin(), fileList->end(), compareSize);
 
         counter = 0;
-        result[0].SetID(counter);
+        (*fileList)[0].SetID(counter);
 
-        for (int i = 1; i < result.size(); i++)
+        for (int i = 1; i < fileList->size(); i++)
         {
-            if (result[i-1].size() != result[i].size()) counter++; //if it isnt duplicate increase number
-            result[i].SetID(counter);
+            if ((*fileList)[i-1].size() != (*fileList)[i].size()) counter++; //if it isnt duplicate increase number
+            (*fileList)[i].SetID(counter);
+
+            progress = ((i+1) * 100)/fileList->count();
+            if ((i * 100)/fileList->count() < progress)
+                emit ProgressChanged(progress);
         }
     }
 
-    if (mtd & DuplicatesFinder::Name)
+    if (method & DuplicatesFinder::Name)
     {
-        if (mtd & DuplicatesFinder::Size) ReduceList(result);
-        if (result.count() == 0) return result;
+        emit ProgressChanged(0);
+        if (method & DuplicatesFinder::Size) ReduceList(*fileList);
+        if (fileList->count() == 0) this->thread()->quit();
 
-        qSort(result.begin(), result.end(), compareName);
+        qSort(fileList->begin(), fileList->end(), compareName);
 
         counter = 0;
-        result[0].SetID(counter);
+        (*fileList)[0].SetID(counter);
 
-        for (int i = 1; i < result.size(); i++)
+        for (int i = 1; i < fileList->size(); i++)
         {
-            if (result[i-1].fileName() != result[i].fileName()) counter++; //if it isnt duplicate increase number
-            result[i].SetID(counter);
+            if ((*fileList)[i-1].fileName() != (*fileList)[i].fileName()) counter++; //if it isnt duplicate increase number
+            (*fileList)[i].SetID(counter);
+
+            progress = ((i+1) * 100)/fileList->count();
+            if ((i * 100)/fileList->count() < progress)
+                emit ProgressChanged(progress);
         }
     }
 
-    if (mtd & DuplicatesFinder::Sha1)
+    if (method & DuplicatesFinder::Sha1)
     {
-        if (mtd != DuplicatesFinder::Sha1) ReduceList(result); //if isnt choosen ONLY sha1 then have to reduce list
-        if (result.count() == 0) return result;
+        emit ProgressChanged(0);
+        if (method != DuplicatesFinder::Sha1) ReduceList(*fileList); //if isnt choosen ONLY sha1 then have to reduce list
+        if (fileList->count() == 0) this->thread()->quit();
 
         //Get all SHA1 first (later we are using saved values)
-        for (int i = 0; i < result.size(); i++) result[i].CalculateSHA1();
+        for (int i = 0; i < fileList->size(); i++) (*fileList)[i].CalculateSHA1();
 
-        qSort(result.begin(), result.end(), compareSHA1);
+        qSort(fileList->begin(), fileList->end(), compareSHA1);
 
         counter = 0;
-        result[0].SetID(counter);
+        (*fileList)[0].SetID(counter);
 
-        for (int i = 1; i < result.size(); i++)
+        for (int i = 1; i < fileList->size(); i++)
         {
-            if (result[i-1].GetSHA1() != result[i].GetSHA1()) counter++; //if it isnt duplicate increase number
-            result[i].SetID(counter);
+            if ((*fileList)[i-1].GetSHA1() != (*fileList)[i].GetSHA1()) counter++; //if it isnt duplicate increase number
+            (*fileList)[i].SetID(counter);
+
+            progress = ((i+1) * 100)/fileList->count();
+            if ((i * 100)/fileList->count() < progress)
+                emit ProgressChanged(progress);
         }
     }
 
-    ReduceList(result);
-    FixID(result);
+    ReduceList(*fileList);
+    FixID(*fileList);
+    this->thread()->quit();
+}
 
-    return result;
+void DuplicatesFinder::ConnectToThread(QThread &cThread)
+{
+    connect(&cThread, SIGNAL(started()), this, SLOT(Search()));
+}
+
+QList<FileInfoEx>& DuplicatesFinder::GetResult()
+{
+    return *fileList;
+}
+
+DuplicatesFinder::~DuplicatesFinder()
+{
+    delete fileList;
 }

@@ -1,9 +1,39 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+/*-------------------------------------------------------
+         Copyright - GNU GENERAL PUBLIC LICENSE
+                Version 3, 29 June 2007
+
+Main Window Class
+
+METHODS:
+    void traceTo(const QModelIndex &index, int explorerID);
+
+    Used for browse dirs and open files
+    index is selected index returned by QTableView
+    explorerID is ID of FileModel to use
+
+
+    QModelIndexList getSelectedRowsIndexes(int explorerID);
+
+    returns all selected indexes from specified FileModel
+
+ADDITIONAL INFO:
+
+
+TODO:
+-
+
+---------------------------------------------------------*/
+
 #include <QMainWindow>
 #include <QtCore>
-#include <QFileSystemModel>
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <QInputDialog>
+
+#include "filemodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,19 +46,40 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void traceTo(const QModelIndex &index, int explorerID);
+    QModelIndexList getSelectedRowsIndexes(int explorerID);
     
 private slots:
-    void on_treeView_clicked(const QModelIndex &index);
+    void on_filesExplorerView_doubleClicked(const QModelIndex &index);
 
-    void on_tableView_doubleClicked(const QModelIndex &index);
+    void on_lEPath_returnPressed();
 
-    void on_lEPath_textEdited(const QString &arg1);
+    void on_filesExplorerView_2_doubleClicked(const QModelIndex &index);
+
+    void on_lEPath_2_returnPressed();
+
+    void on_pbOpen_clicked();
+
+    void on_filesExplorerView_activated(const QModelIndex &index);
+
+    void on_filesExplorerView_2_activated(const QModelIndex &index);
+
+    void on_pbMove_clicked();
+
+    void on_pbCopy_clicked();
+
+    void on_pbRemove_clicked();
+
+    void on_pbRename_clicked();
+
+    void on_pbMkdir_clicked();
+
+    void on_pbTerm_clicked();
 
 private:
     Ui::MainWindow *ui;
-
-    QFileSystemModel *dirsModel;
-    QFileSystemModel *filesModel;
+    FileModel *filesModel[2];
+    int lastFocus;
 };
 
 #endif // MAINWINDOW_H

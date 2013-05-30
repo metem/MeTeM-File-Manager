@@ -7,22 +7,23 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //set initial size
-    QList<int> sizes;
-    sizes << 150 << 1;
-    ui->splitter->setSizes(sizes);
-    ui->splitter->setStretchFactor(0, 0);
-    ui->splitter->setStretchFactor(1, 1);
+    for (int i = 0; i < 2; i++) //2 is number of models
+    {
+        filesModel[i] = new FileModel(this);
+        filesModel[i]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
+        filesModel[i]->setRootPath(QDir::rootPath()); //root path (for unix based '/')
+    }
+    ui->filesExplorerView->setModel(filesModel[0]);
+    ui->filesExplorerView_2->setModel(filesModel[1]);
 
-    dirsModel = new QFileSystemModel(this);
-    dirsModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Drives);
-    dirsModel->setRootPath(QDir::rootPath());
-    ui->treeView->setModel(dirsModel);
 
-    filesModel = new QFileSystemModel(this);
-    filesModel->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
-    filesModel->setRootPath(QDir::rootPath());
-    ui->tableView->setModel(filesModel);
+    //for my purposes only (to delete before first release)
+    QString initPath = "/media/D";
+    ui->lEPath->setText(initPath);
+    ui->lEPath_2->setText(initPath);
+
+    on_lEPath_returnPressed();
+    on_lEPath_2_returnPressed();
 }
 
 MainWindow::~MainWindow()
@@ -30,26 +31,201 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_treeView_clicked(const QModelIndex &index)
+void MainWindow::traceTo(const QModelIndex &index, int explorerID)
 {
-    QFileInfo file(dirsModel->fileInfo(index).absoluteFilePath());
-    ui->tableView->setRootIndex(filesModel->setRootPath(file.filePath()));
+    QFileInfo file = filesModel[explorerID]->fileInfo(index);
 
-    ui->lEPath->setText(file.filePath());
+    if (file.isReadable())
+    {
+        if (file.isDir())
+        {
+            #ifdef Q_OS_UNIX
+                if (file.absoluteFilePath() != "/") filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
+                else filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
+            #endif
+
+            {
+                if (explorerID == 0)
+                {
+                    ui->filesExplorerView->setRootIndex(filesModel[0]->setRootPath(file.absoluteFilePath()));
+                    ui->lEPath->setText(file.absoluteFilePath());
+                }
+                else
+                {
+                    ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(file.absoluteFilePath()));
+                    ui->lEPath_2->setText(file.absoluteFilePath());
+                }
+            }
+        }
+        else QDesktopServices::openUrl(QUrl::fromLocalFile(file.absoluteFilePath()));
+    }
+    else
+    {
+        // msg -> can't read file
+    }
 }
 
-void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
+QModelIndexList MainWindow::getSelectedRowsIndexes(int explorerID)
 {
-    QFileInfo file(dirsModel->fileInfo(index).absoluteFilePath());
-    ui->tableView->setRootIndex(filesModel->setRootPath(file.filePath()));
+    QModelIndexList indexes;
 
-    ui->lEPath->setText(file.filePath());
+    if (explorerID == 0) indexes = ui->filesExplorerView->selectionModel()->selectedRows();
+    else indexes = ui->filesExplorerView_2->selectionModel()->selectedRows();
 
-    ui->treeView->scrollTo(dirsModel->setRootPath(file.filePath()));
+    return indexes;
 }
 
-void MainWindow::on_lEPath_textEdited(const QString &arg1)
+void MainWindow::on_filesExplorerView_doubleClicked(const QModelIndex &index)
 {
-    ui->treeView->scrollTo(dirsModel->setRootPath(arg1));
-    ui->tableView->setRootIndex(filesModel->setRootPath(arg1));
+    traceTo(index, 0);
+}
+
+void MainWindow::on_filesExplorerView_2_doubleClicked(const QModelIndex &index)
+{
+    traceTo(index, 1);
+}
+
+void MainWindow::on_lEPath_returnPressed()
+{
+    ui->filesExplorerView->setRootIndex(filesModel[0]->setRootPath(ui->lEPath->text()));
+}
+
+
+void MainWindow::on_lEPath_2_returnPressed()
+{
+    ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(ui->lEPath->text()));
+}
+
+void MainWindow::on_filesExplorerView_activated(const QModelIndex &index)
+{
+    (void)index;
+    lastFocus = 0;
+}
+
+void MainWindow::on_filesExplorerView_2_activated(const QModelIndex &index)
+{
+    (void)index;
+    lastFocus = 1;
+}
+
+void MainWindow::on_pbOpen_clicked()
+{
+    QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
+
+    for (int i = 0; i < indexes.count(); ++i)
+    {
+        QString file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
+        QDesktopServices::openUrl(QUrl::fromLocalFile(file));
+    }
+}
+
+void MainWindow::on_pbMove_clicked()
+{
+    QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
+    QString destination;
+    if (lastFocus == 0) destination = filesModel[1]->rootPath();
+    else destination = filesModel[0]->rootPath();
+
+    destination += "/";
+
+    QFileInfo file;
+    for (int i = 0; i < indexes.count(); ++i)
+    {
+        file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
+        if (!QFile::rename(file.absoluteFilePath(), destination + file.fileName()))
+        {
+            // msg -> can't move file
+        }
+    }
+}
+
+void MainWindow::on_pbCopy_clicked()
+{
+    QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
+    QString destination;
+    if (lastFocus == 0) destination = filesModel[1]->rootPath();
+    else destination = filesModel[0]->rootPath();
+
+    destination += "/";
+
+    QFileInfo file;
+    for (int i = 0; i < indexes.count(); ++i)
+    {
+        file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
+        if (!QFile::copy(file.absoluteFilePath(), destination + file.fileName()))
+        {
+            // msg -> can't copy file
+        }
+    }
+}
+
+void MainWindow::on_pbRemove_clicked()
+{
+    QMessageBox msgBox;
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+
+    QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
+
+    msgBox.setWindowTitle("Remove");
+    msgBox.setText(QString("Are you sure you want to delete %1 file(s)?").arg(indexes.count()));
+
+    QFileInfo file;
+    if(msgBox.exec() == QMessageBox::Yes)
+        for (int i = 0; i < indexes.count(); ++i)
+        {
+            file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
+            if (!QFile::remove(file.absoluteFilePath()))
+            {
+                // msg -> can't remove file
+            }
+        }
+}
+
+void MainWindow::on_pbRename_clicked()
+{
+    QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
+
+    if (indexes.count() == 1)
+    {
+        QFileInfo file = filesModel[lastFocus]->fileInfo(indexes[0]).absoluteFilePath();
+
+        bool ok;
+        QString newName = QInputDialog::getText(this, tr("Rename"),
+                                                tr("New name:"), QLineEdit::Normal,
+                                                file.fileName(), &ok);
+        if (ok && !newName.isEmpty())
+        {
+            if (!QFile::rename(file.absoluteFilePath(), file.path() + '/' + newName))
+            {
+                // msg -> can't rename file
+            }
+        }
+    }
+    else
+    {
+        //open multi-rename tool
+    }
+}
+
+void MainWindow::on_pbMkdir_clicked()
+{
+    QDir dir = filesModel[lastFocus]->rootPath();
+
+    bool ok;
+
+    QString dirName = QInputDialog::getText(this, tr("Make directory"),
+                                            tr("Directory name:"), QLineEdit::Normal,
+                                            "", &ok);
+    if (ok && !dirName.isEmpty())
+    {
+        if (!dir.mkdir(dirName))
+        {
+            // msg -> can't mkdir
+        }
+    }
+}
+
+void MainWindow::on_pbTerm_clicked()
+{
 }

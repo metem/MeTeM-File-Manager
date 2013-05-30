@@ -34,14 +34,13 @@ static QList<FileInfoEx> Find(QFile file, Method mtd, bool subDirs);
 
 ---------------------------------------------------------*/
 
+#include <QThread>
 #include "filesfinder.h"
 #include "fileinfoex.h"
 
 class DuplicatesFinder : public FilesFinder
 {
-private:
-    void ReduceList(QList<FileInfoEx> &list);
-    void FixID(QList<FileInfoEx> &list);
+    Q_OBJECT
 
 public:
     enum Method
@@ -53,10 +52,29 @@ public:
     };
     Q_DECLARE_FLAGS(Methods, Method)
 
-    DuplicatesFinder(const QDir& dir) : FilesFinder(dir){}
-    DuplicatesFinder(QString path = "") : FilesFinder(path){}
+signals:
+    void ProgressChanged(int progress);
 
-    QList<FileInfoEx> Find(Methods mtd, bool subDirs);
+public slots:
+    void SubDirs(bool value) { subDirs = value; }
+    void SetMethods(Methods flags);
+    void Search();
+
+private:
+    void ReduceList(QList<FileInfoEx> &list);
+    void FixID(QList<FileInfoEx> &list);
+    bool subDirs;
+    Methods method;
+    QList<FileInfoEx> *fileList;
+    bool stop;
+
+public:
+    DuplicatesFinder(const QDir& dir) : FilesFinder(dir), subDirs(false), method(0), fileList(NULL), stop(false){}
+    DuplicatesFinder(QString path = "") : FilesFinder(path), subDirs(false), method(0), fileList(NULL), stop(false){}
+    ~DuplicatesFinder();
+
+    void ConnectToThread(QThread &cThread);
+    QList<FileInfoEx>& GetResult();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DuplicatesFinder::Methods)

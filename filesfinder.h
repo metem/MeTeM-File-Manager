@@ -20,19 +20,25 @@ TODO:
 
 ---------------------------------------------------------*/
 
+#include <QObject>
 #include <QDir>
 #include <QStack>
 
-class FilesFinder
+class FilesFinder : public QObject
 {
+    Q_OBJECT
+
+public slots:
+    void SetDir(QString path);
+    void SetDir(const QDir& dir);
+
 protected:
     QDir dir;
+
 public:
     FilesFinder(const QDir& dir) : dir(dir){}
     FilesFinder(QString path = ""){ dir = QDir(path); }
 
-    void SetDir(QString path);
-    void SetDir(const QDir& dir);
     QFileInfoList Find(bool subDirs, QDir::Filters filters, const QStringList &nameFilters = QStringList());
 };
 

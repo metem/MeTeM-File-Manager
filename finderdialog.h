@@ -30,6 +30,7 @@ TODO:
 
 #include "duplicatesfinder.h"
 #include "textformatter.h"
+#include "directorytree.h"
 
 #include <QDebug>
 
@@ -42,7 +43,6 @@ class FinderDialog : public QDialog
     Q_OBJECT
     
 public:
-    explicit FinderDialog(QWidget *parent = 0);
     explicit FinderDialog(QString path, bool duplicates, QWidget *parent = 0);
 
     ~FinderDialog();
@@ -61,7 +61,15 @@ private slots:
 
     void on_pbDeleteSelected_clicked();
 
+    void on_tbDrives_clicked();
+
+    void on_cbSha1_clicked(bool checked);
+
+    void UpdateView();
+
 private:
+    QThread *finderThread;
+    DirectoryTree *dirTree;
     QList<FileInfoEx> *fileList;
     DuplicatesFinder *duplicatesFinder;
     Ui::FinderDialog *ui;
