@@ -59,6 +59,7 @@ public slots:
     void SubDirs(bool value) { subDirs = value; }
     void SetMethods(Methods flags);
     void Search();
+    void StopThread();
 
 private:
     void ReduceList(QList<FileInfoEx> &list);

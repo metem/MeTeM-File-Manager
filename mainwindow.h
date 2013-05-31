@@ -33,6 +33,7 @@ TODO:
 #include <QMessageBox>
 #include <QInputDialog>
 
+#include "finderdialog.h"
 #include "filemodel.h"
 
 namespace Ui {
@@ -76,7 +77,12 @@ private slots:
 
     void on_pbTerm_clicked();
 
+    void on_tbDuplicates_1_clicked();
+
+    void on_tbDuplicates_2_clicked();
+
 private:
+    FinderDialog *fd;
     Ui::MainWindow *ui;
     FileModel *filesModel[2];
     int lastFocus;
