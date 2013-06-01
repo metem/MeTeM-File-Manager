@@ -54,28 +54,21 @@ public:
 
 signals:
     void ProgressChanged(int progress);
+    void DSearchFinished();
 
 public slots:
-    void SubDirs(bool value) { subDirs = value; }
     void SetMethods(Methods flags);
     void Search();
-    void StopThread();
 
 private:
     void ReduceList(QList<FileInfoEx> &list);
     void FixID(QList<FileInfoEx> &list);
-    bool subDirs;
     Methods method;
-    QList<FileInfoEx> *fileList;
-    bool stop;
 
 public:
-    DuplicatesFinder(const QDir& dir) : FilesFinder(dir), subDirs(false), method(0), fileList(NULL), stop(false){}
-    DuplicatesFinder(QString path = "") : FilesFinder(path), subDirs(false), method(0), fileList(NULL), stop(false){}
-    ~DuplicatesFinder();
-
-    void ConnectToThread(QThread &cThread);
-    QList<FileInfoEx>& GetResult();
+    DuplicatesFinder(const QDir& dir) : FilesFinder(dir), method(0) {}
+    DuplicatesFinder(QString path = "") : FilesFinder(path), method(0) {}
+    ~DuplicatesFinder(){}
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DuplicatesFinder::Methods)

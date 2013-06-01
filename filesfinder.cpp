@@ -1,28 +1,31 @@
 #include "filesfinder.h"
 
-void FilesFinder::SetDir(QString path)
+FilesFinder::~FilesFinder()
 {
-    this->dir = QDir(path);
+    delete fileList;
 }
 
-void FilesFinder::SetDir(const QDir& dir)
+QList<FileInfoEx>& FilesFinder::GetResult()
 {
-    this->dir = QDir(dir);
+    return *fileList;
 }
 
-QFileInfoList FilesFinder::Find(bool subDirs, QDir::Filters filters, const QStringList &nameFilters)
+void FilesFinder::Search()
 {
-    QFileInfoList result;
+    stop = false;
+    fileList = new QList<FileInfoEx>();
     QStack<QString> stack;
     stack.push(dir.absolutePath());
-    while (!stack.isEmpty())
+
+    while (!stack.isEmpty() && !stop)
     {
         QString sSubdir = stack.pop();
         QDir subdir(sSubdir);
 
-        result += subdir.entryInfoList(nameFilters, filters);
+        QList<QFileInfo> flist = subdir.entryInfoList(nameFilters, dirFilters);
+        fileList->append(FileInfoEx::ConvertList(flist));
 
-        if (subDirs)
+        if (includeSubdirs)
         {
             QFileInfoList infoEntries = subdir.entryInfoList(QDir::AllDirs | QDir::NoSymLinks | QDir::NoDotAndDotDot);
             for (int i = 0; i < infoEntries.size(); i++)
@@ -32,5 +35,5 @@ QFileInfoList FilesFinder::Find(bool subDirs, QDir::Filters filters, const QStri
             }
         }
     }
-    return result;
+    emit FSearchFinished();
 }

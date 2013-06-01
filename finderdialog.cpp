@@ -1,44 +1,75 @@
 #include "finderdialog.h"
 #include "ui_finderdialog.h"
 
-FinderDialog::FinderDialog(QString path, bool duplicates, QWidget *parent) :
-    QDialog(parent),
-    finderThread(new QThread()),
+FinderDialog::FinderDialog() :
+    QDialog(0),
+
+    filesFinderThread(new QThread),
+    filesFinder(new FilesFinder()),
+
+    duplicatesFinderThread(new QThread),
+    duplicatesFinder(new DuplicatesFinder()),
+
     dirTree(new DirectoryTree(this)),
     fileList(NULL),
-    duplicatesFinder(new DuplicatesFinder(path)),
+
     ui(new Ui::FinderDialog),    
     size(0)
+
 {
-    duplicatesFinder->ConnectToThread(*finderThread);
-    duplicatesFinder->moveToThread(finderThread);
-
-    (void)fileList;
     ui->setupUi(this);
-    ui->lePath->setText(path);
-    ui->lPattern->setVisible(!duplicates);
-    ui->lePattern->setVisible(!duplicates);
-    ui->cbDuplicatesEnbl->setChecked(duplicates);
-    ui->gbMethods->setVisible(duplicates);
-    on_cbDuplicatesEnbl_clicked(duplicates);
 
+    //ui init settings
     ui->twFileList->setHorizontalHeaderItem(0, new QTableWidgetItem("Name"));
     ui->twFileList->setHorizontalHeaderItem(1, new QTableWidgetItem("Path"));
     ui->twFileList->setHorizontalHeaderItem(2, new QTableWidgetItem("Size"));
     ui->twFileList->setHorizontalHeaderItem(3, new QTableWidgetItem("Creation Date"));
 
-
+    //colorset for rows
     colorsSet[0] = QColor(255,255,255);
     colorsSet[1] = QColor(230,230,230);
 
+    //thread settings
+    duplicatesFinder->moveToThread(duplicatesFinderThread);
+    connect(duplicatesFinder, SIGNAL(DSearchFinished()), duplicatesFinderThread, SLOT(quit()));
+    connect(duplicatesFinderThread, SIGNAL(finished()), this, SLOT(UpdateView()));
+    connect(duplicatesFinderThread, SIGNAL(started()), duplicatesFinder, SLOT(Search()));
+
     connect(duplicatesFinder, SIGNAL(ProgressChanged(int)), ui->progressBar, SLOT(setValue(int)));
-    connect(finderThread, SIGNAL(finished()), this, SLOT(UpdateView()));
+
+    filesFinder->moveToThread(filesFinderThread);
+    connect(filesFinder, SIGNAL(FSearchFinished()), filesFinderThread, SLOT(quit()));
+    connect(filesFinderThread, SIGNAL(finished()), this, SLOT(UpdateView()));
+    connect(filesFinderThread, SIGNAL(started()), filesFinder, SLOT(Search()));
+
+    connect(filesFinder, SIGNAL(ProgressChanged(int)), ui->progressBar, SLOT(setValue(int)));
+}
+
+FinderDialog::~FinderDialog()
+{
+    filesFinderThread->terminate();
+    duplicatesFinderThread->terminate();
+
+    delete filesFinderThread;
+    delete filesFinder;
+
+    delete duplicatesFinderThread;
+    delete duplicatesFinder;
+
+    delete dirTree;
+    delete fileList;
+
+    delete ui;
 }
 
 void FinderDialog::UpdateView()
 {
+    ui->progressBar->setMaximum(100); //to back from sliding to normal progress bar after files searching
     ui->pbSearch->setText("Search");
-    fileList = new QList<FileInfoEx>(duplicatesFinder->GetResult());
+    if (ui->cbDuplicatesEnbl->isChecked())
+        fileList = new QList<FileInfoEx>(duplicatesFinder->GetResult());
+    else
+        fileList = new QList<FileInfoEx>(filesFinder->GetResult());
 
     size = 0;
     working = true;
@@ -46,76 +77,88 @@ void FinderDialog::UpdateView()
 
     QTableWidgetItem *Item;
 
-    for (int i = 0; i < fileList->count(); i++)
+    if (ui->cbDuplicatesEnbl->isChecked())
     {
-        Item = new QTableWidgetItem((*fileList)[i].fileName());
+        for (int i = 0; i < fileList->count(); i++)
+        {
+            Item = new QTableWidgetItem((*fileList)[i].fileName());
 
-        if ((i > 0) && ((*fileList)[i-1].GetID() == (*fileList)[i].GetID()))
-            Item->setCheckState(Qt::Checked);
-        else Item->setCheckState(Qt::Unchecked);
+            if ((i > 0) && ((*fileList)[i-1].GetID() == (*fileList)[i].GetID()))
+                Item->setCheckState(Qt::Checked);
+            else Item->setCheckState(Qt::Unchecked);
 
 
-        Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
-        Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
 
-        ui->twFileList->setItem(i, 0, Item);
+            ui->twFileList->setItem(i, 0, Item);
 
-        Item = new QTableWidgetItem((*fileList)[i].absolutePath());
-        Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
-        Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
+            Item = new QTableWidgetItem((*fileList)[i].absolutePath());
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
 
-        ui->twFileList->setItem(i, 1, Item);
+            ui->twFileList->setItem(i, 1, Item);
 
-        Item = new QTableWidgetItem(QString::number((*fileList)[i].size()) + " bytes");
-        Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
-        Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
+            Item = new QTableWidgetItem(QString::number((*fileList)[i].size()) + " bytes");
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
 
-        ui->twFileList->setItem(i, 2, Item);
+            ui->twFileList->setItem(i, 2, Item);
 
-        Item = new QTableWidgetItem((*fileList)[i].created().toString("dd.MM.yyyy hh:mm:ss"));
-        Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
-        Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
+            Item = new QTableWidgetItem((*fileList)[i].created().toString("dd.MM.yyyy hh:mm:ss"));
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
 
-        ui->twFileList->setItem(i, 3, Item);
+            ui->twFileList->setItem(i, 3, Item);
 
-        Item = new QTableWidgetItem((*fileList)[i].GetSHA1().toHex().data());
-        Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
-        Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
+            Item = new QTableWidgetItem((*fileList)[i].GetSHA1().toHex().data());
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[(*fileList)[i].GetID()%2]);
 
-        ui->twFileList->setItem(i, 4, Item);
+            ui->twFileList->setItem(i, 4, Item);
+        }
     }
+    else
+    {
+        for (int i = 0; i < fileList->count(); i++)
+        {
+            Item = new QTableWidgetItem((*fileList)[i].fileName());
+            Item->setCheckState(Qt::Unchecked);
+
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[i%2]);
+
+            ui->twFileList->setItem(i, 0, Item);
+
+            Item = new QTableWidgetItem((*fileList)[i].absolutePath());
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[i%2]);
+
+            ui->twFileList->setItem(i, 1, Item);
+
+            Item = new QTableWidgetItem(QString::number((*fileList)[i].size()) + " bytes");
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[i%2]);
+
+            ui->twFileList->setItem(i, 2, Item);
+
+            Item = new QTableWidgetItem((*fileList)[i].created().toString("dd.MM.yyyy hh:mm:ss"));
+            Item->setFlags(Item->flags() ^ Qt::ItemIsEditable);
+            Item->setBackgroundColor(colorsSet[i%2]);
+
+            ui->twFileList->setItem(i, 3, Item);
+        }
+    }
+
     working = false;
 }
 
-FinderDialog::~FinderDialog()
-{
-    finderThread->exit();
-    delete finderThread;
-    delete dirTree;
-    delete fileList;
-    delete duplicatesFinder;
-    delete ui;
-}
-
-void FinderDialog::on_progressBar_valueChanged(int value)
-{
-    (void)value;
-    ui->lProgress->setText(ui->progressBar->text());
-}
-
-void dbglist(QList<FileInfoEx> &list)
-{
-    for (int i = 0; i < list.size(); i++)
-    {
-        qDebug() << list[i].fileName() << " " << (int)list[i].GetID() << " " << list[i].GetSHA1().toHex();
-    }
-}
-
 void FinderDialog::on_pbSearch_clicked()
-{        
-    if (finderThread->isRunning())
+{
+    if (duplicatesFinderThread->isRunning() || filesFinderThread->isRunning())
     {
-        ui->pbSearch->setText("Search");
+        duplicatesFinder->Stop();
+        filesFinder->Stop();
     }
     else
     {
@@ -131,10 +174,10 @@ void FinderDialog::on_pbSearch_clicked()
             return;
         }
 
-        duplicatesFinder->SetDir(dir);
-
         if (ui->cbDuplicatesEnbl->isChecked())
         {
+            duplicatesFinder->SetDir(dir);
+
             DuplicatesFinder::Methods mtd = 0;
             if (ui->cbSha1->isChecked()) mtd = mtd | DuplicatesFinder::Sha1;
             if (ui->cbSize->isChecked()) mtd = mtd | DuplicatesFinder::Size;
@@ -145,30 +188,23 @@ void FinderDialog::on_pbSearch_clicked()
                 QMessageBox::warning(this, "Warning", "You have to choose at least one of search methods.", QMessageBox::Ok);
                 return;
             }
-            duplicatesFinder->SubDirs(ui->cbSubDirs->isChecked());
+            duplicatesFinder->IncludeSubdirs(ui->cbSubDirs->isChecked());
             duplicatesFinder->SetMethods(mtd);
-            finderThread->start();
-            ui->pbSearch->setText("Stop");
+
+            duplicatesFinderThread->start();
         }
+        else
+        {
+            ui->progressBar->setMaximum(0); //to make sliding progress bar
+            filesFinder->SetDir(dir);
+            filesFinder->SetNameFilters(ui->lePattern->text().split(';', QString::SkipEmptyParts));
+
+            filesFinder->IncludeSubdirs(ui->cbSubDirs->isChecked());
+            filesFinderThread->start();
+        }
+
+        ui->pbSearch->setText("Stop");
     }
-}
-
-void FinderDialog::on_cbDuplicatesEnbl_clicked(bool checked)
-{
-    ui->lPattern->setVisible(!checked);
-    ui->lePattern->setVisible(!checked);
-}
-
-void FinderDialog::on_pbSelectAll_clicked()
-{
-    for (int i = 0; i < ui->twFileList->rowCount(); i++)
-        ui->twFileList->item(i,0)->setCheckState(Qt::Checked);
-}
-
-void FinderDialog::on_pbUnselectAll_clicked()
-{
-    for (int i = 0; i < ui->twFileList->rowCount(); i++)
-        ui->twFileList->item(i,0)->setCheckState(Qt::Unchecked);
 }
 
 void FinderDialog::on_twFileList_itemChanged(QTableWidgetItem *item)
@@ -202,10 +238,30 @@ void FinderDialog::on_pbDeleteSelected_clicked()
             }
 }
 
+//Simple UI actions
+
 void FinderDialog::on_tbDrives_clicked()
 {
     if (dirTree->exec() == QDialog::Accepted)
         ui->lePath->setText(dirTree->GetSelectedDir().absolutePath());
+}
+
+void FinderDialog::on_pbSelectAll_clicked()
+{
+    for (int i = 0; i < ui->twFileList->rowCount(); i++)
+        ui->twFileList->item(i,0)->setCheckState(Qt::Checked);
+}
+
+void FinderDialog::on_pbUnselectAll_clicked()
+{
+    for (int i = 0; i < ui->twFileList->rowCount(); i++)
+        ui->twFileList->item(i,0)->setCheckState(Qt::Unchecked);
+}
+
+void FinderDialog::on_cbDuplicatesEnbl_clicked(bool checked)
+{
+    ui->lPattern->setVisible(!checked);
+    ui->lePattern->setVisible(!checked);
 }
 
 void FinderDialog::on_cbSha1_clicked(bool checked)
@@ -219,4 +275,16 @@ void FinderDialog::on_cbSha1_clicked(bool checked)
     {
         ui->twFileList->removeColumn(4);
     }
+}
+
+void FinderDialog::SetPath(QString path)
+{
+    ui->lePath->setText(path);
+}
+
+void FinderDialog::Duplicates(bool value)
+{
+    ui->cbDuplicatesEnbl->setChecked(value);
+    ui->gbMethods->setVisible(value);
+    on_cbDuplicatesEnbl_clicked(value);
 }

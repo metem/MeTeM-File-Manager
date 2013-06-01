@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    fd = NULL;
 
     for (int i = 0; i < 2; i++) //2 is number of models
     {
@@ -30,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete fd;
 }
 
 void MainWindow::traceTo(const QModelIndex &index, int explorerID)
@@ -234,18 +232,14 @@ void MainWindow::on_pbTerm_clicked()
 
 void MainWindow::on_tbDuplicates_1_clicked()
 {
-    delete fd;
-    fd = NULL;
-
-    fd = new FinderDialog(ui->lEPath->text(), true, this);
-    fd->show();
+    FinderDialog::getInstance().Duplicates(true);
+    FinderDialog::getInstance().SetPath(ui->lEPath->text());
+    FinderDialog::getInstance().show();
 }
 
 void MainWindow::on_tbDuplicates_2_clicked()
 {
-    delete fd;
-    fd = NULL;
-
-    fd = new FinderDialog(ui->lEPath_2->text(), true, this);
-    fd->show();
+    FinderDialog::getInstance().Duplicates(true);
+    FinderDialog::getInstance().SetPath(ui->lEPath_2->text());
+    FinderDialog::getInstance().show();
 }

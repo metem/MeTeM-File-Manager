@@ -82,7 +82,6 @@ private slots:
     void on_tbDuplicates_2_clicked();
 
 private:
-    FinderDialog *fd;
     Ui::MainWindow *ui;
     FileModel *filesModel[2];
     int lastFocus;

@@ -38,17 +38,29 @@ namespace Ui {
 class FinderDialog;
 }
 
+
 class FinderDialog : public QDialog
 {
     Q_OBJECT
     
-public:
-    explicit FinderDialog(QString path, bool duplicates, QWidget *parent = 0);
+public slots:
+    void SetPath(QString path);
+    void Duplicates(bool value);
 
+public:
+    explicit FinderDialog();
     ~FinderDialog();
+
+    //FinderDialog is singleton
+    FinderDialog(FinderDialog const&);   // Don't Implement
+    void operator=(FinderDialog const&); // Don't implement
+    static FinderDialog& getInstance()
+    {
+        static FinderDialog instance;
+        return instance;
+    }
     
 private slots:
-    void on_progressBar_valueChanged(int value);
     void on_pbSearch_clicked();
 
     void on_cbDuplicatesEnbl_clicked(bool checked);
@@ -68,14 +80,20 @@ private slots:
     void UpdateView();
 
 private:
-    QThread *finderThread;
+    QThread *filesFinderThread;
+    FilesFinder *filesFinder;
+
+    QThread *duplicatesFinderThread;
+    DuplicatesFinder *duplicatesFinder;
+
     DirectoryTree *dirTree;
     QList<FileInfoEx> *fileList;
-    DuplicatesFinder *duplicatesFinder;
+
     Ui::FinderDialog *ui;
+
     QColor colorsSet[2];
-    qint64 size;
-    bool working;
+    qint64 size; //total size of files
+    bool working; //true when updating view
 };
 
 #endif // FINDERDIALOG_H
