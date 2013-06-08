@@ -64,6 +64,8 @@ public:
     int drawLegend(QPainter *painter);
     double palpha;
 
+    int addPiece(QString name, float Percentage);
+
 private:
     double cX,cY,cW,cH,pW,lX,lY;
     int nPiece;
@@ -75,6 +77,8 @@ private:
     QPointF GetPoint(double angle, double R1 = 0, double R2 = 0);
     int GetQuater(double angle);
     double Angle360(double angle);
+
+    QColor colorsSet[10];
 
 
 signals:

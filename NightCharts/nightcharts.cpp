@@ -36,6 +36,17 @@ Nightcharts::Nightcharts()//QPainter *painter)
     lX = cX+cW+20;
     lY = cY;
     shadows = true;
+
+    colorsSet[0] = Qt::green;
+    colorsSet[1] = Qt::yellow;
+    colorsSet[2] = Qt::cyan;
+    colorsSet[3] = QColor(200,10,50);
+    colorsSet[4] = Qt::blue;
+    colorsSet[5] = QColor(255,204,51);
+    colorsSet[6] = QColor(51,255,204);
+    colorsSet[7] = QColor(204,51,255);
+    colorsSet[8] = QColor(255,102,51);
+    colorsSet[9] = QColor(51,128,204);
 }
 Nightcharts::~Nightcharts()
 {
@@ -54,6 +65,7 @@ int Nightcharts::addPiece(QString name,Qt::GlobalColor color,float Percentage)
 
     return 0;
 }
+
 int Nightcharts::addPiece(QString name, QColor color, float Percentage)
 {
     this->nPiece++;
@@ -65,6 +77,22 @@ int Nightcharts::addPiece(QString name, QColor color, float Percentage)
 
     return 0;
 }
+
+int Nightcharts::addPiece(QString name, float Percentage)
+{
+    this->nPiece++;
+    pieceNC piece;
+    piece.addName(name);
+    piece.setPerc(Percentage);
+
+    //sorting
+    int i = 0;
+    while ((i < pieces.count()) && (pieces[i].pPerc > Percentage)) i++;
+    pieces.insert(i, piece);
+
+    return 0;
+}
+
 int Nightcharts::setCords(double x, double y, double w, double h)
 {
     this->cX = x;
@@ -113,44 +141,46 @@ int Nightcharts::setShadows(bool ok)
 
 int Nightcharts::draw(QPainter *painter)
 {
+    for (int i = 0; i < pieces.count(); i++) pieces[i].setColor(colorsSet[i%10]);
+
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(Qt::NoPen);
     if (this->ctype==Nightcharts::Pie)
     {
-      pW = 0;
-      double pdegree = 0;
+        pW = 0;
+        double pdegree = 0;
 
-      //Options
-      QLinearGradient gradient(cX+0.5*cW,cY,cX+0.5*cW,cY+cH*2.5);
-      gradient.setColorAt(1,Qt::black);
+        //Options
+        QLinearGradient gradient(cX+0.5*cW,cY,cX+0.5*cW,cY+cH*2.5);
+        gradient.setColorAt(1,Qt::black);
 
 
-      //Draw
-      //pdegree = (360/100)*pieces[i].pPerc;
-      if (shadows)
-      {
-          double sumangle = 0;
-          for (int i=0;i<pieces.size();i++)
-          {
-              sumangle += 3.6*pieces[i].pPerc;
-          }
-          painter->setBrush(Qt::darkGray);
-          painter->drawPie(cX,cY+pW+5,cW,cH,palpha*16,sumangle*16);
-      }
+        //Draw
+        //pdegree = (360/100)*pieces[i].pPerc;
+        if (shadows)
+        {
+            double sumangle = 0;
+            for (int i=0;i<pieces.size();i++)
+            {
+                sumangle += 3.6*pieces[i].pPerc;
+            }
+            painter->setBrush(Qt::darkGray);
+            painter->drawPie(cX,cY+pW+5,cW,cH,palpha*16,sumangle*16);
+        }
 
-      QPen pen;
-      pen.setWidth(2);
+        QPen pen;
+        pen.setWidth(2);
 
-      for (int i=0;i<pieces.size();i++)
-      {
-        gradient.setColorAt(0,pieces[i].rgbColor);
-        painter->setBrush(gradient);
-        pen.setColor(pieces[i].rgbColor);
-        painter->setPen(pen);
-        pdegree = 3.6*pieces[i].pPerc;
-        painter->drawPie(cX,cY,cW,cH,palpha*16,pdegree*16);
-        palpha += pdegree;
-      }
+        for (int i=0;i<pieces.size();i++)
+        {
+            gradient.setColorAt(0,pieces[i].rgbColor);
+            painter->setBrush(gradient);
+            pen.setColor(pieces[i].rgbColor);
+            painter->setPen(pen);
+            pdegree = 3.6*pieces[i].pPerc;
+            painter->drawPie(cX,cY,cW,cH,palpha*16,pdegree*16);
+            palpha += pdegree;
+        }
     }
     else if (this->ctype==Nightcharts::Dpie)
     {
@@ -208,82 +238,82 @@ int Nightcharts::draw(QPainter *painter)
 
         for (int i=0;i<pieces.size();i++)
         {
-          gradient.setColorAt(0.5,pieces[i].rgbColor);
-          painter->setBrush(gradient);
-          pdegree = 3.6*pieces[i].pPerc;
-          painter->drawPie(cX,cY,cW,cH,palpha*16,pdegree*16);
+            gradient.setColorAt(0.5,pieces[i].rgbColor);
+            painter->setBrush(gradient);
+            pdegree = 3.6*pieces[i].pPerc;
+            painter->drawPie(cX,cY,cW,cH,palpha*16,pdegree*16);
 
-          double a_ = Angle360(palpha);
-          int q_ = GetQuater(palpha);
+            double a_ = Angle360(palpha);
+            int q_ = GetQuater(palpha);
 
-          palpha += pdegree;
+            palpha += pdegree;
 
-          double a = Angle360(palpha);
-          int q = GetQuater(palpha);
+            double a = Angle360(palpha);
+            int q = GetQuater(palpha);
 
-          QPainterPath path;
-          p = GetPoint(palpha);
+            QPainterPath path;
+            p = GetPoint(palpha);
 
-          if((q == 3 || q == 4) && (q_ == 3 || q_ == 4))
-          {
-              // 1)
-              if (a>a_)
-              {
-                  QPointF p_old = GetPoint(palpha-pdegree);
-                  path.moveTo(p_old.x()-1,p_old.y());
-                  path.arcTo(cX,cY,cW,cH,palpha-pdegree,pdegree);
-                  path.lineTo(p.x(),p.y()+pW);
-                  path.arcTo(cX,cY+pW,cW,cH,palpha,-pdegree);
-              }
-              // 2)
-              else
-              {
-                  path.moveTo(cX,cY+cH/2);
-                  path.arcTo(cX,cY,cW,cH,180,Angle360(palpha)-180);
-                  path.lineTo(p.x(),p.y()+pW);
-                  path.arcTo(cX,cY+pW,cW,cH,Angle360(palpha),-Angle360(palpha)+180);
-                  path.lineTo(cX,cY+cH/2);
+            if((q == 3 || q == 4) && (q_ == 3 || q_ == 4))
+            {
+                // 1)
+                if (a>a_)
+                {
+                    QPointF p_old = GetPoint(palpha-pdegree);
+                    path.moveTo(p_old.x()-1,p_old.y());
+                    path.arcTo(cX,cY,cW,cH,palpha-pdegree,pdegree);
+                    path.lineTo(p.x(),p.y()+pW);
+                    path.arcTo(cX,cY+pW,cW,cH,palpha,-pdegree);
+                }
+                // 2)
+                else
+                {
+                    path.moveTo(cX,cY+cH/2);
+                    path.arcTo(cX,cY,cW,cH,180,Angle360(palpha)-180);
+                    path.lineTo(p.x(),p.y()+pW);
+                    path.arcTo(cX,cY+pW,cW,cH,Angle360(palpha),-Angle360(palpha)+180);
+                    path.lineTo(cX,cY+cH/2);
 
-                  path.moveTo(p.x(),p.y());
-                  path.arcTo(cX,cY,cW,cH,palpha-pdegree,360-Angle360(palpha-pdegree));
-                  path.lineTo(cX+cW,cY+cH/2+pW);
-                  path.arcTo(cX,cY+pW,cW,cH,0,-360+Angle360(palpha-pdegree));
-              }
+                    path.moveTo(p.x(),p.y());
+                    path.arcTo(cX,cY,cW,cH,palpha-pdegree,360-Angle360(palpha-pdegree));
+                    path.lineTo(cX+cW,cY+cH/2+pW);
+                    path.arcTo(cX,cY+pW,cW,cH,0,-360+Angle360(palpha-pdegree));
+                }
 
-          }
-          // 3)
-          else if((q == 3 || q == 4) && (q_ == 1 || q_ == 2) && a>a_ )
-          {
-              path.moveTo(cX,cY+cH/2);
-              path.arcTo(cX,cY,cW,cH,180,Angle360(palpha)-180);
-              path.lineTo(p.x(),p.y()+pW);
-              path.arcTo(cX,cY+pW,cW,cH,Angle360(palpha),-Angle360(palpha)+180);
-              path.lineTo(cX,cY+cH/2);
-          }
-          // 4)
-          else if((q == 1 || q == 2) && (q_ == 3 || q_ == 4) && a<a_)
-          {
-              p = GetPoint(palpha-pdegree);
-              path.moveTo(p.x(),p.y());
-              path.arcTo(cX,cY,cW,cH,palpha-pdegree,360-Angle360(palpha-pdegree));
-              path.lineTo(cX+cW,cY+cH/2+pW);
-              path.arcTo(cX,cY+pW,cW,cH,0,-360+Angle360(palpha-pdegree));
-          }
-          // 5)
-          else if((q ==1 || q==2) && (q_==1 || q_==2) && a<a_)
-          {
-              path.moveTo(cX,cY+cH/2);
-              path.arcTo(cX,cY,cW,cH,180,180);
-              path.lineTo(cX+cW,cY+cH/2+pW);
-              path.arcTo(cX,cY+pW,cW,cH,0,-180);
-              path.lineTo(cX,cY+cH/2);
-          }
-          if (!path.isEmpty())
-          {
-              gradient_side.setColorAt(1,pieces[i].rgbColor);
-              painter->setBrush(gradient_side);
-              painter->drawPath(path);
-          }
+            }
+            // 3)
+            else if((q == 3 || q == 4) && (q_ == 1 || q_ == 2) && a>a_ )
+            {
+                path.moveTo(cX,cY+cH/2);
+                path.arcTo(cX,cY,cW,cH,180,Angle360(palpha)-180);
+                path.lineTo(p.x(),p.y()+pW);
+                path.arcTo(cX,cY+pW,cW,cH,Angle360(palpha),-Angle360(palpha)+180);
+                path.lineTo(cX,cY+cH/2);
+            }
+            // 4)
+            else if((q == 1 || q == 2) && (q_ == 3 || q_ == 4) && a<a_)
+            {
+                p = GetPoint(palpha-pdegree);
+                path.moveTo(p.x(),p.y());
+                path.arcTo(cX,cY,cW,cH,palpha-pdegree,360-Angle360(palpha-pdegree));
+                path.lineTo(cX+cW,cY+cH/2+pW);
+                path.arcTo(cX,cY+pW,cW,cH,0,-360+Angle360(palpha-pdegree));
+            }
+            // 5)
+            else if((q ==1 || q==2) && (q_==1 || q_==2) && a<a_)
+            {
+                path.moveTo(cX,cY+cH/2);
+                path.arcTo(cX,cY,cW,cH,180,180);
+                path.lineTo(cX+cW,cY+cH/2+pW);
+                path.arcTo(cX,cY+pW,cW,cH,0,-180);
+                path.lineTo(cX,cY+cH/2);
+            }
+            if (!path.isEmpty())
+            {
+                gradient_side.setColorAt(1,pieces[i].rgbColor);
+                painter->setBrush(gradient_side);
+                painter->drawPath(path);
+            }
         }
     }
     else if (this->ctype==Nightcharts::Histogramm)
@@ -370,7 +400,7 @@ int Nightcharts::drawLegend(QPainter *painter)
             float x = lX+dist;
             float y = lY+dist+i*(painter->fontMetrics().height()+2*dist);
             painter->drawRect(x,y,painter->fontMetrics().height(),painter->fontMetrics().height());
-            painter->drawText(x+painter->fontMetrics().height()+dist,y+painter->fontMetrics().height()/2+dist,pieces[i].pname + " - " + QString::number(pieces[i].pPerc, 'f', 2)+"%");
+            painter->drawText(x+painter->fontMetrics().height()+dist,y+painter->fontMetrics().height()/2+dist,QString::number(pieces[i].pPerc, 'f', 2) + "% - " + pieces[i].pname);
         }
         break;
     }
@@ -398,7 +428,7 @@ int Nightcharts::drawLegend(QPainter *painter)
             painter->drawRoundRect(p_.x() ,p_.y(), recW, -recH);
             painter->drawText(p_.x()+5, p_.y()-recH/2+5, label);
             angle -= pdegree/2;
-         }
+        }
         break;
     }
 }

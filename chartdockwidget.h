@@ -23,8 +23,6 @@ private:
     void paintEvent(QPaintEvent* e);
 
     QFileSystemModel* model;
-
-    QColor colorsSet[10];
 };
 
 #endif // CHARTDOCKWIDGET_H
