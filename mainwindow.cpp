@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->filesExplorerView->setModel(filesModel[0]);
     ui->filesExplorerView_2->setModel(filesModel[1]);
 
+    ui->chartDockWidget_1->setModel(filesModel[0]);
+    ui->chartDockWidget_2->setModel(filesModel[1]);
 
     //for my purposes only (to delete before first release)
     QString initPath = "/media/D";

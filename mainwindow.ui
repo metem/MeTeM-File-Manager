@@ -7,15 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>720</width>
-    <height>432</height>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
      <widget class="QSplitter" name="splitter">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -62,12 +62,6 @@
             <width>0</width>
             <height>0</height>
            </size>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="dragEnabled">
-           <bool>false</bool>
           </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -140,9 +134,6 @@
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
-          <property name="dragEnabled">
-           <bool>false</bool>
-          </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
           </property>
@@ -176,7 +167,7 @@
       </widget>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item>
      <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
@@ -252,8 +243,73 @@
     </item>
    </layout>
   </widget>
+  <widget class="ChartDockWidget" name="chartDockWidget_1">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string/>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
+  <widget class="ChartDockWidget" name="chartDockWidget_2">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string/>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2"/>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ChartDockWidget</class>
+   <extends>QDockWidget</extends>
+   <header>chartdockwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -263,11 +319,43 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>651</x>
-     <y>401</y>
+     <x>700</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
      <x>715</x>
+     <y>367</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filesExplorerView</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>chartDockWidget_1</receiver>
+   <slot>update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>185</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filesExplorerView_2</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>chartDockWidget_2</receiver>
+   <slot>update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>503</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
      <y>367</y>
     </hint>
    </hints>

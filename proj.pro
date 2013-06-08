@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     finderdialog.cpp \
     textformatter.cpp \
     directorytree.cpp \
-    filemodel.cpp
+    filemodel.cpp \
+    NightCharts/nightcharts.cpp \
+    chartdockwidget.cpp
 
 HEADERS  += mainwindow.h \
     fileinfoex.h \
@@ -29,7 +31,9 @@ HEADERS  += mainwindow.h \
     finderdialog.h \
     textformatter.h \
     directorytree.h \
-    filemodel.h
+    filemodel.h \
+    NightCharts/nightcharts.h \
+    chartdockwidget.h
 
 FORMS    += mainwindow.ui \
     finderdialog.ui \
