@@ -32,7 +32,9 @@ TODO:
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QShortcut>
 
+#include "comparatordialog.h"
 #include "finderdialog.h"
 #include "filemodel.h"
 
@@ -75,16 +77,28 @@ private slots:
 
     void on_pbMkdir_clicked();
 
-    void on_pbTerm_clicked();
-
     void on_tbDuplicates_1_clicked();
 
     void on_tbDuplicates_2_clicked();
+
+    void on_pbCompare_clicked();
 
 private:
     Ui::MainWindow *ui;
     FileModel *filesModel[2];
     int lastFocus;
+    ComparatorDialog *dlg;
+
+
+    //Shortcut
+    QShortcut *scOpen;
+    QShortcut *scMove;
+    QShortcut *scCopy;
+    QShortcut *scRemove;
+    QShortcut *scRename;
+    QShortcut *scMkdir;
+    QShortcut *scCompare;
+    QShortcut *scExit;
 };
 
 #endif // MAINWINDOW_H

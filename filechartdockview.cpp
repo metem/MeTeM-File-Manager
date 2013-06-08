@@ -1,21 +1,21 @@
-#include "chartdockwidget.h"
+#include "filechartdockview.h"
 
-ChartDockWidget::ChartDockWidget(QWidget *parent) :
+FileChartDockView::FileChartDockView(QWidget *parent) :
     QDockWidget(parent), model(NULL)
 {
 }
 
-ChartDockWidget::~ChartDockWidget()
+FileChartDockView::~FileChartDockView()
 {
     delete model;
 }
 
-void ChartDockWidget::setModel(QFileSystemModel *model)
+void FileChartDockView::setModel(QFileSystemModel *model)
 {
     this->model = model;
 }
 
-void ChartDockWidget::paintEvent(QPaintEvent* e)
+void FileChartDockView::paintEvent(QPaintEvent* e)
 {
     QDockWidget::paintEvent(e);
     if (model != NULL)

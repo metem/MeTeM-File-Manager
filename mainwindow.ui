@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
+    <width>723</width>
     <height>569</height>
    </rect>
   </property>
@@ -206,35 +206,35 @@
        <item>
         <widget class="QPushButton" name="pbRemove">
          <property name="text">
-          <string>F3 Remove</string>
+          <string>F4 Remove</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pbRename">
          <property name="text">
-          <string>F4 Rename</string>
+          <string>F5 Rename</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pbMkdir">
          <property name="text">
-          <string>F5 Mkdir</string>
+          <string>F6 Mkdir</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pbTerm">
+        <widget class="QPushButton" name="pbCompare">
          <property name="text">
-          <string>F6 Term</string>
+          <string>F7 Compare</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pbExit">
          <property name="text">
-          <string>F7 Exit</string>
+          <string>F8 Exit</string>
          </property>
         </widget>
        </item>
@@ -243,7 +243,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="ChartDockWidget" name="chartDockWidget_1">
+  <widget class="FileChartDockView" name="chartDockWidget_1">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -273,7 +273,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents"/>
   </widget>
-  <widget class="ChartDockWidget" name="chartDockWidget_2">
+  <widget class="FileChartDockView" name="chartDockWidget_2">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -304,9 +304,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ChartDockWidget</class>
+   <class>FileChartDockView</class>
    <extends>QDockWidget</extends>
-   <header>chartdockwidget.h</header>
+   <header>filechartdockview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -3,7 +3,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    dlg(NULL)
 {
     ui->setupUi(this);
 
@@ -26,10 +27,40 @@ MainWindow::MainWindow(QWidget *parent) :
 
     on_lEPath_returnPressed();
     on_lEPath_2_returnPressed();
+
+    //Shortcuts
+    scOpen = new QShortcut(QKeySequence("F1"), this);
+    scMove = new QShortcut(QKeySequence("F2"), this);
+    scCopy = new QShortcut(QKeySequence("F3"), this);
+    scRemove = new QShortcut(QKeySequence("F4"), this);
+    scRename = new QShortcut(QKeySequence("F5"), this);
+    scMkdir = new QShortcut(QKeySequence("F6"), this);
+    scCompare = new QShortcut(QKeySequence("F7"), this);
+    scExit = new QShortcut(QKeySequence("F8"), this);
+
+    connect(scOpen, SIGNAL(activated()), this, SLOT(on_pbOpen_clicked()));
+    connect(scMove, SIGNAL(activated()), this, SLOT(on_pbMove_clicked()));
+    connect(scCopy, SIGNAL(activated()), this, SLOT(on_pbCopy_clicked()));
+    connect(scRemove, SIGNAL(activated()), this, SLOT(on_pbRemove_clicked()));
+    connect(scRename, SIGNAL(activated()), this, SLOT(on_pbRename_clicked()));
+    connect(scMkdir, SIGNAL(activated()), this, SLOT(on_pbMkdir_clicked()));
+    connect(scCompare, SIGNAL(activated()), this, SLOT(on_pbCompare_clicked()));
+    connect(scExit, SIGNAL(activated()), this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()
 {
+    delete scOpen;
+    delete scMove;
+    delete scCopy;
+    delete scRemove;
+    delete scRename;
+    delete scMkdir;
+    delete scCompare;
+    delete scExit;
+
+    delete dlg;
+
     delete ui;
 }
 
@@ -210,6 +241,13 @@ void MainWindow::on_pbRename_clicked()
     }
 }
 
+void MainWindow::on_pbCompare_clicked()
+{
+    delete dlg;
+    dlg = new ComparatorDialog(this);
+    dlg->show();
+}
+
 void MainWindow::on_pbMkdir_clicked()
 {
     QDir dir = filesModel[lastFocus]->rootPath();
@@ -226,10 +264,6 @@ void MainWindow::on_pbMkdir_clicked()
             // msg -> can't mkdir
         }
     }
-}
-
-void MainWindow::on_pbTerm_clicked()
-{
 }
 
 void MainWindow::on_tbDuplicates_1_clicked()

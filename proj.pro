@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     directorytree.cpp \
     filemodel.cpp \
     NightCharts/nightcharts.cpp \
-    chartdockwidget.cpp
+    filechartdockview.cpp \
+    comparatordialog.cpp
 
 HEADERS  += mainwindow.h \
     fileinfoex.h \
@@ -33,8 +34,10 @@ HEADERS  += mainwindow.h \
     directorytree.h \
     filemodel.h \
     NightCharts/nightcharts.h \
-    chartdockwidget.h
+    filechartdockview.h \
+    comparatordialog.h
 
 FORMS    += mainwindow.ui \
     finderdialog.ui \
-    directorytree.ui
+    directorytree.ui \
+    comparatordialog.ui

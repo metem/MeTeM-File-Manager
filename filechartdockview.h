@@ -6,12 +6,12 @@
 
 #include "NightCharts/nightcharts.h"
 
-class ChartDockWidget : public QDockWidget
+class FileChartDockView : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit ChartDockWidget(QWidget *parent = 0);
-    ~ChartDockWidget();
+    explicit FileChartDockView(QWidget *parent = 0);
+    ~FileChartDockView();
 
     void setModel(QFileSystemModel *model);
     
