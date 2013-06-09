@@ -1,31 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-/*-------------------------------------------------------
-         Copyright - GNU GENERAL PUBLIC LICENSE
-                Version 3, 29 June 2007
-
-Main Window Class
-
-METHODS:
-    void traceTo(const QModelIndex &index, int explorerID);
-
-    Used for browse dirs and open files
-    index is selected index returned by QTableView
-    explorerID is ID of FileModel to use
-
-
-    QModelIndexList getSelectedRowsIndexes(int explorerID);
-
-    returns all selected indexes from specified FileModel
-
-ADDITIONAL INFO:
-
-
-TODO:
--
-
----------------------------------------------------------*/
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*
+* Main Window Class
+*
+* METHODS:
+*     void traceTo(const QModelIndex &index, int explorerID);
+*
+*     Used for browse dirs and open files
+*     index is selected index returned by QTableView
+*     explorerID is ID of FileModel to use
+*
+*
+*     QModelIndexList getSelectedRowsIndexes(int explorerID);
+*
+*     returns all selected indexes from specified FileModel
+*/
 
 #include <QMainWindow>
 #include <QtCore>

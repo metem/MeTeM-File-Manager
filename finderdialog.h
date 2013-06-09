@@ -1,25 +1,21 @@
 #ifndef FINDERDIALOG_H
 #define FINDERDIALOG_H
 
-/*-------------------------------------------------------
-         Copyright - GNU GENERAL PUBLIC LICENSE
-                Version 3, 29 June 2007
-
-UI for files/duplicates finder.
-
-METHODS:
-
-QColor colorsSet[2]; - colors of rows
-qint64 size; - size of selected files
-bool working; - true when program is searching files
-
-ADDITIONAL INFO:
--
-
-TODO:
--
-
----------------------------------------------------------*/
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*
+* UI for files/duplicates finder.
+*
+* METHODS:
+*
+* QColor colorsSet[2]; - colors of rows
+* qint64 size; - size of selected files
+* bool working; - true when program is searching files
+*
+*/
 
 
 #include <QColor>

@@ -1,29 +1,30 @@
 ﻿#ifndef FILEINFOEX_H
 #define FILEINFOEX_H
 
-/*-------------------------------------------------------
-         Copyright - GNU GENERAL PUBLIC LICENSE
-                Version 3, 29 June 2007
-
-Extended QFileInfo class
-
-METHODS:
-
-void CalculateSHA1();
-
-result is saved in QByteArray SHA1 field
-
-uses BLOCK_SIZE constant to determine amount of data
-which is reading to memory on each iteration. (maximum memory space used by file).
-
-ADDITIONAL INFO:
-
-Used to save results of duplicatesfinder class.
-
-TODO:
--
-
----------------------------------------------------------*/
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*
+* Extended QFileInfo class
+*
+* METHODS:
+*
+* void CalculateSHA1();
+*
+* result is saved in QByteArray SHA1 field
+*
+* uses BLOCK_SIZE constant to determine amount of data
+* which is reading to memory on each iteration. (maximum memory space used by file).
+*
+* ADDITIONAL INFO:
+*
+* Used to save results of duplicatesfinder class.
+*
+* TODO:
+* -
+*/
 
 #include <QFileInfo>
 #include <QCryptographicHash>

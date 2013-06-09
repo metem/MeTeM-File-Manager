@@ -1,24 +1,20 @@
 #ifndef FILESFINDER_H
 #define FILESFINDER_H
 
-/*-------------------------------------------------------
-         Copyright - GNU GENERAL PUBLIC LICENSE
-                Version 3, 29 June 2007
-
-FilesFinder
-
-METHODS:
-
-QFileInfoList Find(bool subDirs, QDir::Filters filters, const QStringList &nameFilters = QStringList());
-Extended QDir::entryInfoList method that include sub-directories searching.
-
-ADDITIONAL INFO:
--
-
-TODO:
--
-
----------------------------------------------------------*/
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*
+* FilesFinder
+*
+* METHODS:
+*
+* QFileInfoList Find(bool subDirs, QDir::Filters filters, const QStringList &nameFilters = QStringList());
+* Extended QDir::entryInfoList method that include sub-directories searching.
+*
+*/
 
 #include <QObject>
 #include <QDir>

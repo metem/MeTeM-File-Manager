@@ -1,3 +1,10 @@
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*/
+
 #include "fileinfoex.h"
 
 FileInfoEx::FileInfoEx(const FileInfoEx & fileinfo) : QFileInfo(fileinfo), fileID(0)

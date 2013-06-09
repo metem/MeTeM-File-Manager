@@ -1,3 +1,10 @@
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -243,9 +250,18 @@ void MainWindow::on_pbRename_clicked()
 
 void MainWindow::on_pbCompare_clicked()
 {
-    delete dlg;
-    dlg = new ComparatorDialog(this);
-    dlg->show();
+    QModelIndexList indexes[2] =
+    {
+        ui->filesExplorerView->selectionModel()->selectedRows(),
+        ui->filesExplorerView_2->selectionModel()->selectedRows()
+    };
+
+    if ((indexes[0].count() == 1) && (indexes[1].count() == 1))
+    {
+        delete dlg;
+        dlg = new ComparatorDialog(filesModel[0]->fileInfo(indexes[0][0]),filesModel[1]->fileInfo(indexes[1][0]),this);
+        dlg->show();
+    }
 }
 
 void MainWindow::on_pbMkdir_clicked()

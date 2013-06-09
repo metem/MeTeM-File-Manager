@@ -1,22 +1,17 @@
 #ifndef FILEMODEL_H
 #define FILEMODEL_H
 
-/*-------------------------------------------------------
-         Copyright - GNU GENERAL PUBLIC LICENSE
-                Version 3, 29 June 2007
-
-Custom FileModel class for files explorer (-> QTableView)
-
-METHODS:
-
-
-ADDITIONAL INFO:
-
-
-TODO:
--
-
----------------------------------------------------------*/
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*
+*
+*
+*
+*      Custom FileModel class for files explorer (-> QTableView)
+*/
 
 #include <QFileSystemModel>
 #include <QFileIconProvider>

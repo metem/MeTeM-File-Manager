@@ -1,22 +1,12 @@
 #ifndef DIRECTORYTREE_H
 #define DIRECTORYTREE_H
 
-/*-------------------------------------------------------
-         Copyright - GNU GENERAL PUBLIC LICENSE
-                Version 3, 29 June 2007
-
-Simple directory selection form
-
-METHODS:
-
-
-ADDITIONAL INFO:
-
-
-TODO:
--
-
----------------------------------------------------------*/
+/*
+*           Copyright 2012 by Mateusz Ucher
+*
+*              GNU GENERAL PUBLIC LICENSE
+*                Version 3, 29 June 2007
+*/
 
 #include <QDialog>
 #include <QFileSystemModel>
