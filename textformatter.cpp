@@ -5,9 +5,17 @@
 *                Version 3, 29 June 2007
 */
 
+
+//PIMPL (Private IMPLementation) design pattern
 #include "textformatter.h"
 
-QString TextFormatter::SizeFromBytes(qint64 bytes)
+class TextFormatterImpl
+{
+public:
+    static QString SizeFromBytes(qint64 bytes);
+};
+
+QString TextFormatterImpl::SizeFromBytes(qint64 bytes)
 {
     if (bytes < 1024) return QString::number(bytes) + " B";
 
@@ -30,4 +38,9 @@ QString TextFormatter::SizeFromBytes(qint64 bytes)
     }
 
     return QString::number(round(result * 1000.0) / 1000.0) + ' ' + unit;
+}
+
+QString TextFormatter::SizeFromBytes(qint64 bytes)
+{
+    return TextFormatterImpl::SizeFromBytes(bytes);
 }

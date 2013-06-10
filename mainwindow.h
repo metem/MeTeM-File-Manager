@@ -42,11 +42,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(bool createLog, QWidget *parent = 0);
     ~MainWindow();
     void traceTo(const QModelIndex &index, int explorerID);
     QModelIndexList getSelectedRowsIndexes(int explorerID);
     
+public slots:
+    void writeLog(const QString log);
+
 private slots:
     void on_filesExplorerView_doubleClicked(const QModelIndex &index);
 
@@ -84,6 +87,10 @@ private:
     int lastFocus;
     ComparatorDialog *dlg;
 
+    bool createLogFile;
+
+    QFile *logFile;
+    QTextStream *logStream;
 
     //Shortcut
     QShortcut *scOpen;

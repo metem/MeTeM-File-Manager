@@ -33,7 +33,7 @@ public slots:
     void SetDirFilters(QDir::Filters dirFilters) { this->dirFilters = dirFilters; }
     void SetNameFilters(const QStringList& nameFilters) { this->nameFilters = nameFilters; }
 
-    void Search();
+    virtual void Search();
     void Stop(){ stop = true; }
 
 signals:

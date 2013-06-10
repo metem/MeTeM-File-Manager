@@ -8,11 +8,32 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(bool createLog, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    dlg(NULL)
+    dlg(NULL),
+    createLogFile(createLog),
+    logFile(NULL),
+    logStream(NULL)
 {
+    if (createLogFile)
+    {
+        logFile = new QFile("log.txt");
+        if (!logFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+        {
+            delete logFile;
+            logFile = NULL;
+            createLogFile = false;
+
+            //msg can not open file
+        }
+        else
+        {
+            logStream = new QTextStream(logFile);
+            writeLog("New log");
+        }
+    }
+
     ui->setupUi(this);
 
     for (int i = 0; i < 2; i++) //2 is number of models
@@ -57,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if ((logFile != NULL) && (logFile->isOpen())) logFile->close();
     delete scOpen;
     delete scMove;
     delete scCopy;
@@ -67,8 +89,19 @@ MainWindow::~MainWindow()
     delete scExit;
 
     delete dlg;
+    delete logStream;
+    delete logFile;
 
     delete ui;
+}
+
+void MainWindow::writeLog(const QString log)
+{
+    if (createLogFile)
+    {
+        QDateTime now = QDateTime::currentDateTime();
+        *logStream << now.toString("dd/MM/yyyy hh:mm") << " - " << log << "\r\n";
+    }
 }
 
 void MainWindow::traceTo(const QModelIndex &index, int explorerID)
@@ -79,10 +112,10 @@ void MainWindow::traceTo(const QModelIndex &index, int explorerID)
     {
         if (file.isDir())
         {
-            #ifdef Q_OS_UNIX
-                if (file.absoluteFilePath() != "/") filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
-                else filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
-            #endif
+#ifdef Q_OS_UNIX
+            if (file.absoluteFilePath() != "/") filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
+            else filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
+#endif
 
             {
                 if (explorerID == 0)
@@ -156,6 +189,7 @@ void MainWindow::on_pbOpen_clicked()
     {
         QString file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
         QDesktopServices::openUrl(QUrl::fromLocalFile(file));
+        writeLog("Opening " + file);
     }
 }
 
@@ -174,8 +208,9 @@ void MainWindow::on_pbMove_clicked()
         file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
         if (!QFile::rename(file.absoluteFilePath(), destination + file.fileName()))
         {
-            // msg -> can't move file
+            writeLog("Can't move file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
         }
+        else writeLog("Moving file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
     }
 }
 
@@ -194,8 +229,9 @@ void MainWindow::on_pbCopy_clicked()
         file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
         if (!QFile::copy(file.absoluteFilePath(), destination + file.fileName()))
         {
-            // msg -> can't copy file
+            writeLog("Can't copy file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
         }
+        else writeLog("Copying file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
     }
 }
 
@@ -217,8 +253,9 @@ void MainWindow::on_pbRemove_clicked()
             file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
             if (!QFile::remove(file.absoluteFilePath()))
             {
-                // msg -> can't remove file
+ writeLog("Can't remove " + file.absoluteFilePath());
             }
+            else writeLog("Removing " + file.absoluteFilePath());
         }
 }
 
@@ -238,8 +275,9 @@ void MainWindow::on_pbRename_clicked()
         {
             if (!QFile::rename(file.absoluteFilePath(), file.path() + '/' + newName))
             {
-                // msg -> can't rename file
+                writeLog("Can't rename " + file.absoluteFilePath());
             }
+            else writeLog("Renaming " + file.absoluteFilePath() + " > " + newName);
         }
     }
     else
@@ -261,6 +299,7 @@ void MainWindow::on_pbCompare_clicked()
         delete dlg;
         dlg = new ComparatorDialog(filesModel[0]->fileInfo(indexes[0][0]),filesModel[1]->fileInfo(indexes[1][0]),this);
         dlg->show();
+        writeLog("Comparing " + filesModel[0]->fileInfo(indexes[0][0]).absoluteFilePath() + " with " + filesModel[1]->fileInfo(indexes[1][0]).absoluteFilePath());
     }
 }
 
@@ -277,8 +316,9 @@ void MainWindow::on_pbMkdir_clicked()
     {
         if (!dir.mkdir(dirName))
         {
-            // msg -> can't mkdir
+            writeLog("Can't make dir: " + dirName);
         }
+        else writeLog("Creating dir: " + dirName);
     }
 }
 

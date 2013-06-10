@@ -11,7 +11,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+
+    bool log = false;
+    for (int i = 1; i < argc; i++) log = log | (QString(argv[i]) == "-l");
+
+    MainWindow w(log);
     w.show();
 
     return a.exec();
