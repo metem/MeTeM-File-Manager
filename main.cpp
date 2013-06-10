@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     for (int i = 1; i < argc; i++) log = log | (QString(argv[i]) == "-l");
 
     MainWindow w(log);
+    w.setWindowTitle(qApp->applicationName());
     w.show();
 
     return a.exec();

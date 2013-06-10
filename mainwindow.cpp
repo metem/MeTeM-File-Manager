@@ -57,14 +57,14 @@ MainWindow::MainWindow(bool createLog, QWidget *parent) :
     on_lEPath_2_returnPressed();
 
     //Shortcuts
-    scOpen = new QShortcut(QKeySequence("F1"), this);
-    scMove = new QShortcut(QKeySequence("F2"), this);
-    scCopy = new QShortcut(QKeySequence("F3"), this);
-    scRemove = new QShortcut(QKeySequence("F4"), this);
-    scRename = new QShortcut(QKeySequence("F5"), this);
-    scMkdir = new QShortcut(QKeySequence("F6"), this);
-    scCompare = new QShortcut(QKeySequence("F7"), this);
-    scExit = new QShortcut(QKeySequence("F8"), this);
+    scOpen = new QShortcut(QKeySequence("F3"), this);
+    scMove = new QShortcut(QKeySequence("F6"), this);
+    scCopy = new QShortcut(QKeySequence("F5"), this);
+    scRemove = new QShortcut(QKeySequence("F8"), this);
+    scRename = new QShortcut(QKeySequence("F9"), this);
+    scMkdir = new QShortcut(QKeySequence("F7"), this);
+    scCompare = new QShortcut(QKeySequence("F4"), this);
+    scExit = new QShortcut(QKeySequence("F10"), this);
 
     connect(scOpen, SIGNAL(activated()), this, SLOT(on_pbOpen_clicked()));
     connect(scMove, SIGNAL(activated()), this, SLOT(on_pbMove_clicked()));
@@ -74,6 +74,9 @@ MainWindow::MainWindow(bool createLog, QWidget *parent) :
     connect(scMkdir, SIGNAL(activated()), this, SLOT(on_pbMkdir_clicked()));
     connect(scCompare, SIGNAL(activated()), this, SLOT(on_pbCompare_clicked()));
     connect(scExit, SIGNAL(activated()), this, SLOT(close()));
+
+    ui->filesExplorerView->installEventFilter(this);
+    ui->filesExplorerView_2->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -93,6 +96,18 @@ MainWindow::~MainWindow()
     delete logFile;
 
     delete ui;
+}
+
+
+//get focused window (for actions like mkdir etc...)
+bool MainWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn)
+    {
+        if (object == ui->filesExplorerView) lastFocus = 0;
+        else if (object == ui->filesExplorerView_2) lastFocus = 1;
+    }
+    return false;
 }
 
 void MainWindow::writeLog(const QString log)
@@ -169,18 +184,6 @@ void MainWindow::on_lEPath_2_returnPressed()
     ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(ui->lEPath->text()));
 }
 
-void MainWindow::on_filesExplorerView_activated(const QModelIndex &index)
-{
-    (void)index;
-    lastFocus = 0;
-}
-
-void MainWindow::on_filesExplorerView_2_activated(const QModelIndex &index)
-{
-    (void)index;
-    lastFocus = 1;
-}
-
 void MainWindow::on_pbOpen_clicked()
 {
     QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
@@ -253,7 +256,7 @@ void MainWindow::on_pbRemove_clicked()
             file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
             if (!QFile::remove(file.absoluteFilePath()))
             {
- writeLog("Can't remove " + file.absoluteFilePath());
+                writeLog("Can't remove " + file.absoluteFilePath());
             }
             else writeLog("Removing " + file.absoluteFilePath());
         }
@@ -332,6 +335,20 @@ void MainWindow::on_tbDuplicates_1_clicked()
 void MainWindow::on_tbDuplicates_2_clicked()
 {
     FinderDialog::getInstance().Duplicates(true);
+    FinderDialog::getInstance().SetPath(ui->lEPath_2->text());
+    FinderDialog::getInstance().show();
+}
+
+void MainWindow::on_tb_Finder_1_clicked()
+{
+    FinderDialog::getInstance().Duplicates(false);
+    FinderDialog::getInstance().SetPath(ui->lEPath->text());
+    FinderDialog::getInstance().show();
+}
+
+void MainWindow::on_tb_Finder_2_clicked()
+{
+    FinderDialog::getInstance().Duplicates(false);
     FinderDialog::getInstance().SetPath(ui->lEPath_2->text());
     FinderDialog::getInstance().show();
 }

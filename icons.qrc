@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/FinderIcons">
+        <file>LGPLIcons/Crystal_Clear_action_editcopy.png</file>
+        <file>LGPLIcons/Crystal_Clear_action_viewmag.png</file>
+    </qresource>
+</RCC>

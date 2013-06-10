@@ -45,6 +45,21 @@
             <property name="text">
              <string>...</string>
             </property>
+            <property name="icon">
+             <iconset resource="icons.qrc">
+              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="tb_Finder_1">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="icons.qrc">
+              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
@@ -62,6 +77,12 @@
             <width>0</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::ClickFocus</enum>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>true</bool>
           </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -112,6 +133,21 @@
            <widget class="QToolButton" name="tbDuplicates_2">
             <property name="text">
              <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="icons.qrc">
+              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="tb_Finder_2">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="icons.qrc">
+              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</iconset>
             </property>
            </widget>
           </item>
@@ -185,56 +221,56 @@
        <item>
         <widget class="QPushButton" name="pbOpen">
          <property name="text">
-          <string>F1 Open</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbMove">
-         <property name="text">
-          <string>F2 Move</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbCopy">
-         <property name="text">
-          <string>F3 Copy</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbRemove">
-         <property name="text">
-          <string>F4 Remove</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbRename">
-         <property name="text">
-          <string>F5 Rename</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbMkdir">
-         <property name="text">
-          <string>F6 Mkdir</string>
+          <string>F&amp;3 Open</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pbCompare">
          <property name="text">
-          <string>F7 Compare</string>
+          <string>F&amp;4 Compare</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbCopy">
+         <property name="text">
+          <string>F&amp;5 Copy</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbMove">
+         <property name="text">
+          <string>F&amp;6 Move</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbMkdir">
+         <property name="text">
+          <string>F&amp;7 Mkdir</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbRemove">
+         <property name="text">
+          <string>F&amp;8 Remove</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbRename">
+         <property name="text">
+          <string>F&amp;9 Rename</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pbExit">
          <property name="text">
-          <string>F8 Exit</string>
+          <string>F10 &amp;Exit</string>
          </property>
         </widget>
        </item>
@@ -310,7 +346,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pbExit</sender>

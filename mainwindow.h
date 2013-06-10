@@ -61,10 +61,6 @@ private slots:
 
     void on_pbOpen_clicked();
 
-    void on_filesExplorerView_activated(const QModelIndex &index);
-
-    void on_filesExplorerView_2_activated(const QModelIndex &index);
-
     void on_pbMove_clicked();
 
     void on_pbCopy_clicked();
@@ -81,7 +77,13 @@ private slots:
 
     void on_pbCompare_clicked();
 
+    void on_tb_Finder_1_clicked();
+
+    void on_tb_Finder_2_clicked();
+
 private:
+    bool eventFilter(QObject *object, QEvent *event);
+
     Ui::MainWindow *ui;
     FileModel *filesModel[2];
     int lastFocus;

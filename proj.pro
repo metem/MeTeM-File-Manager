@@ -41,3 +41,6 @@ FORMS    += mainwindow.ui \
     finderdialog.ui \
     directorytree.ui \
     comparatordialog.ui
+
+RESOURCES += \
+    icons.qrc
