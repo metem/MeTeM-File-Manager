@@ -6,16 +6,12 @@
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
-*
-*
-*
-*
-*      Custom FileModel class for files explorer (-> QTableView)
 */
 
 #include <QFileSystemModel>
 #include <QFileIconProvider>
 
+//! File model used by main file explorers
 class FileModel : public QFileSystemModel
 {
     Q_OBJECT

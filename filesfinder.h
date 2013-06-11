@@ -6,14 +6,6 @@
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
-*
-* FilesFinder
-*
-* METHODS:
-*
-* QFileInfoList Find(bool subDirs, QDir::Filters filters, const QStringList &nameFilters = QStringList());
-* Extended QDir::entryInfoList method that include sub-directories searching.
-*
 */
 
 #include <QObject>
@@ -22,6 +14,7 @@
 
 #include "fileinfoex.h"
 
+//! Class used for finding files by name pattern
 class FilesFinder : public QObject
 {
     Q_OBJECT
@@ -29,14 +22,23 @@ class FilesFinder : public QObject
 public slots:
     void SetDir(QString path) { this->dir = QDir(path); }
     void SetDir(const QDir& dir) { this->dir = dir; }
+    //! Recursive folder scan
     void IncludeSubdirs(bool value) { this->includeSubdirs = value; }
     void SetDirFilters(QDir::Filters dirFilters) { this->dirFilters = dirFilters; }
+    //! You can use ';' separator (e.g. Q*;*.jpg)
     void SetNameFilters(const QStringList& nameFilters) { this->nameFilters = nameFilters; }
 
+    //! Search for files
+    /*!
+    * \return Use GetResult() after FSearchFinished() signal
+    */
     virtual void Search();
+
+    //! Used to stop thread in proper time (as soon as possible)
     void Stop(){ stop = true; }
 
 signals:
+    //! Signal emited when searching FILES is finished (prepared to use GetResult())
     void FSearchFinished();
 
 protected:

@@ -48,13 +48,13 @@ MainWindow::MainWindow(bool createLog, QWidget *parent) :
     ui->chartDockWidget_1->setModel(filesModel[0]);
     ui->chartDockWidget_2->setModel(filesModel[1]);
 
-    //for my purposes only (to delete before first release)
+    /*for my purposes only (to delete before first release)
     QString initPath = "/media/D";
     ui->lEPath->setText(initPath);
     ui->lEPath_2->setText(initPath);
 
     on_lEPath_returnPressed();
-    on_lEPath_2_returnPressed();
+    on_lEPath_2_returnPressed();*/
 
     //Shortcuts
     scOpen = new QShortcut(QKeySequence("F3"), this);
@@ -114,8 +114,15 @@ void MainWindow::writeLog(const QString log)
 {
     if (createLogFile)
     {
-        QDateTime now = QDateTime::currentDateTime();
-        *logStream << now.toString("dd/MM/yyyy hh:mm") << " - " << log << "\r\n";
+        try
+        {
+            QDateTime now = QDateTime::currentDateTime();
+            *logStream << now.toString("dd/MM/yyyy hh:mm") << " - " << log << "\r\n";
+        }
+        catch(...)
+        {
+            qDebug() << "Can't write to file stream";
+        }
     }
 }
 

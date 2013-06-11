@@ -16,6 +16,7 @@ namespace Ui {
 class DirectoryTree;
 }
 
+//! Dialog for dir choose
 class DirectoryTree : public QDialog
 {
     Q_OBJECT

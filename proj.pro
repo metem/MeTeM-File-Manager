@@ -18,7 +18,6 @@ SOURCES += main.cpp\
     duplicatesfinder.cpp \
     filesfinder.cpp \
     finderdialog.cpp \
-    textformatter.cpp \
     directorytree.cpp \
     filemodel.cpp \
     NightCharts/nightcharts.cpp \

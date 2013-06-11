@@ -15,6 +15,7 @@ namespace Ui {
 class ComparatorDialog;
 }
 
+//! Dialog for 2 files comparation
 class ComparatorDialog : public QDialog
 {
     Q_OBJECT

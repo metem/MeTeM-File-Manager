@@ -6,29 +6,18 @@
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
-*
-* Extended QFileInfo class
-*
-* METHODS:
-*
-* void CalculateSHA1();
-*
-* result is saved in QByteArray SHA1 field
-*
-* uses BLOCK_SIZE constant to determine amount of data
-* which is reading to memory on each iteration. (maximum memory space used by file).
-*
-* ADDITIONAL INFO:
-*
-* Used to save results of duplicatesfinder class.
-*
-* TODO:
-* -
 */
 
 #include <QFileInfo>
 #include <QCryptographicHash>
 
+//! Extended QFileInfo class, used to save results of duplicatesfinder.
+/*!
+* ADDITIONAL INFO:
+*
+* It's recommended to use Size flag with Sha1 to reduce list of potential duplicates
+* before method start to calculate Sha1.
+*/
 class FileInfoEx : public QFileInfo
 {
 private:
@@ -49,6 +38,13 @@ public:
 
     QByteArray GetSHA1() const { return SHA1; }
 
+    //! Calculating SHA1 hash for file
+    /*!
+    * \return result is saved in QByteArray SHA1; accessible through GetSHA1()
+    *
+    * uses BLOCK_SIZE constant to determine amount of data which is reading to memory
+    * on each iteration. (lower -> more disk reads, higher -> more memory usage)
+    */
     void CalculateSHA1();
 
     static void AddToList(QList<FileInfoEx> &list1, const QFileInfoList &list2);

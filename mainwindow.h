@@ -6,20 +6,6 @@
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
-*
-* Main Window Class
-*
-* METHODS:
-*     void traceTo(const QModelIndex &index, int explorerID);
-*
-*     Used for browse dirs and open files
-*     index is selected index returned by QTableView
-*     explorerID is ID of FileModel to use
-*
-*
-*     QModelIndexList getSelectedRowsIndexes(int explorerID);
-*
-*     returns all selected indexes from specified FileModel
 */
 
 #include <QMainWindow>
@@ -42,12 +28,28 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
+    //! Constructor
+    /*!
+     * \param createLog if true creating log.txt file in application directory (param -l)
+     */
     explicit MainWindow(bool createLog, QWidget *parent = 0);
     ~MainWindow();
+
+    //! Used for browse dirs and open files
+    /*!
+     * index is selected index returned by QTableView
+     * explorerID is ID of FileModel to use
+     */
     void traceTo(const QModelIndex &index, int explorerID);
+
+    //! returns all selected indexes from specified FileModel
+    /*!
+     * \return returns all selected indexes from specified FileModel
+     */
     QModelIndexList getSelectedRowsIndexes(int explorerID);
     
 public slots:
+    //! Used to write log in format "date + time + log"
     void writeLog(const QString log);
 
 private slots:
@@ -82,6 +84,7 @@ private slots:
     void on_tb_Finder_2_clicked();
 
 private:
+    //! used to figure out which file explorer is currently focused
     bool eventFilter(QObject *object, QEvent *event);
 
     Ui::MainWindow *ui;

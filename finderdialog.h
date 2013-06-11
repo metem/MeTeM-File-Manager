@@ -6,17 +6,7 @@
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
-*
-* UI for files/duplicates finder.
-*
-* METHODS:
-*
-* QColor colorsSet[2]; - colors of rows
-* qint64 size; - size of selected files
-* bool working; - true when program is searching files
-*
 */
-
 
 #include <QColor>
 #include <QDialog>
@@ -34,7 +24,7 @@ namespace Ui {
 class FinderDialog;
 }
 
-
+//! Main dialog for search classes [singleton]
 class FinderDialog : public QDialog
 {
     Q_OBJECT
@@ -87,9 +77,12 @@ private:
 
     Ui::FinderDialog *ui;
 
+    //! colors of rows
     QColor colorsSet[2];
-    qint64 size; //total size of files
-    bool working; //true when updating view
+    //! total size of selected files
+    qint64 size;
+    //! true when updating view
+    bool working;
 };
 
 #endif // FINDERDIALOG_H

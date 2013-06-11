@@ -13,6 +13,7 @@
 
 #include "NightCharts/nightcharts.h"
 
+//! View for files chart (using QFileSystemModel)
 class FileChartDockView : public QDockWidget
 {
     Q_OBJECT

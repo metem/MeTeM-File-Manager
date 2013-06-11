@@ -219,7 +219,7 @@ void FinderDialog::on_twFileList_itemChanged(QTableWidgetItem *item)
     if (item->checkState() & Qt::Checked) size += (*fileList)[item->row()].size();
     else if (!working) size -= (*fileList)[item->row()].size();
 
-    ui->lSFS->setText(TextFormatter::SizeFromBytes(size));
+    ui->lSFS->setText(TextFormatter<qint64>::SizeFromBytes(size));
 }
 
 void FinderDialog::on_pbDeleteSelected_clicked()
@@ -240,7 +240,7 @@ void FinderDialog::on_pbDeleteSelected_clicked()
                 {
                     ui->twFileList->removeRow(i);
                     size -= (*fileList)[i].size();
-                    ui->lSFS->setText(TextFormatter::SizeFromBytes(size));
+                    ui->lSFS->setText(TextFormatter<qint64>::SizeFromBytes(size));
                 }
             }
 }

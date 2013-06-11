@@ -20,13 +20,13 @@ ComparatorDialog::ComparatorDialog(QFileInfo file1, QFileInfo file2, QWidget *pa
     ui->l_created_1->setText(file1.created().toString("dd/MM/yyyy hh:mm"));
     ui->l_mod_1->setText(file1.lastModified().toString("dd/MM/yyyy hh:mm"));
     ui->l_read_1->setText(file1.lastRead().toString("dd/MM/yyyy hh:mm"));
-    ui->l_size_1->setText(TextFormatter::SizeFromBytes(file1.size()));
+    ui->l_size_1->setText(TextFormatter<qint64>::SizeFromBytes(file1.size()));
 
     ui->gbFile2->setTitle(file2.fileName());
     ui->l_created_2->setText(file2.created().toString("dd/MM/yyyy hh:mm"));
     ui->l_mod_2->setText(file2.lastModified().toString("dd/MM/yyyy hh:mm"));
     ui->l_read_2->setText(file2.lastRead().toString("dd/MM/yyyy hh:mm"));
-    ui->l_size_2->setText(TextFormatter::SizeFromBytes(file2.size()));
+    ui->l_size_2->setText(TextFormatter<qint64>::SizeFromBytes(file2.size()));
 
     QFont boldF;
     boldF.setBold(true);
