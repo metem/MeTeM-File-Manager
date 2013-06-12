@@ -73,6 +73,7 @@ void FinderDialog::UpdateView()
 {
     ui->progressBar->setMaximum(100); //to back from sliding to normal progress bar after files searching
     ui->pbSearch->setText("Search");
+    delete fileList;
     if (ui->cbDuplicatesEnbl->isChecked())
         fileList = new QList<FileInfoEx>(duplicatesFinder->GetResult());
     else

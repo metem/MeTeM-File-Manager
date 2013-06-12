@@ -67,7 +67,7 @@ QString TextFormatterImpl<T>::SizeFromBytes(T bytes)
         case 4: unit = "TiB"; break;
     }
 
-    return QString::number(round(result * 1000.0) / 1000.0) + ' ' + unit;
+    return QString::number(qFloor((result * 1000.0)+0.5) / 1000.0) + ' ' + unit;
 }
 
 #endif // TEXTFORMATTER_H

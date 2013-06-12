@@ -20,9 +20,14 @@
 #include "nightcharts.h"
 #include <QGraphicsScene>
 
+#ifndef M_PI
+#define M_PI           3.14159265358979323846
+#endif
+
 Nightcharts::Nightcharts()//QPainter *painter)
 
 {
+    palpha = 0;
     font.setFamily("verdana");
     font.setPixelSize(15);
     //painter = painter;

@@ -25,6 +25,7 @@ DirectoryTree::DirectoryTree(QWidget *parent) :
 
 DirectoryTree::~DirectoryTree()
 {
+    delete model;
     delete ui;
 }
 
