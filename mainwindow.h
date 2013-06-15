@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 /*
-*           Copyright 2012 by Mateusz Ucher
+*           Copyright 2013 by Mateusz Ucher
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
@@ -17,6 +17,7 @@
 #include "comparatordialog.h"
 #include "finderdialog.h"
 #include "filemodel.h"
+#include "aboutbox.h"
 
 namespace Ui {
 class MainWindow;
@@ -81,6 +82,8 @@ private slots:
     void on_tb_Finder_1_clicked();
 
     void on_tb_Finder_2_clicked();
+
+    void on_pbAbout_clicked();
 
 private:
     //! used to figure out which file explorer is currently focused

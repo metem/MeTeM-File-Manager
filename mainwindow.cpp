@@ -1,5 +1,5 @@
 /*
-*           Copyright 2012 by Mateusz Ucher
+*           Copyright 2013 by Mateusz Ucher
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
@@ -354,4 +354,9 @@ void MainWindow::on_tb_Finder_2_clicked()
     FinderDialog::getInstance().Duplicates(false);
     FinderDialog::getInstance().SetPath(ui->lEPath_2->text());
     FinderDialog::getInstance().show();
+}
+
+void MainWindow::on_pbAbout_clicked()
+{
+    AboutBox::getInstance().show();
 }

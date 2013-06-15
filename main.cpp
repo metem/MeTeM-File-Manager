@@ -1,5 +1,5 @@
 /*
-*           Copyright 2012 by Mateusz Ucher
+*           Copyright 2013 by Mateusz Ucher
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     for (int i = 1; i < argc; i++) log = log | (QString(argv[i]) == "-l");
 
     MainWindow w(log);
-    w.setWindowTitle(qApp->applicationName());
+    w.setWindowTitle(qApp->applicationName().replace('_',' '));
     w.show();
 
     return a.exec();

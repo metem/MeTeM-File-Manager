@@ -1,5 +1,5 @@
 /*
-*           Copyright 2012 by Mateusz Ucher
+*           Copyright 2013 by Mateusz Ucher
 *
 *              GNU GENERAL PUBLIC LICENSE
 *                Version 3, 29 June 2007
