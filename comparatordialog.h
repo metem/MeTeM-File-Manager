@@ -10,6 +10,9 @@
 
 #include <QDialog>
 #include <QFileInfo>
+#include <QDateTime>
+
+#include "textformatter.h"
 
 namespace Ui {
 class ComparatorDialog;

@@ -10,7 +10,6 @@
 
 #include <QDialog>
 #include <QFileSystemModel>
-#include <QTreeView>
 
 namespace Ui {
 class DirectoryTree;

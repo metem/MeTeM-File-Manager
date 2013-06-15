@@ -8,9 +8,7 @@
 *                Version 3, 29 June 2007
 */
 
-#include <QString>
 #include <qmath.h>
-
 
 //PIMPL (Private IMPLementation) design pattern
 

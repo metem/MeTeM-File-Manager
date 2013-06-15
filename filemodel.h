@@ -9,7 +9,6 @@
 */
 
 #include <QFileSystemModel>
-#include <QFileIconProvider>
 
 //! File model used by main file explorers
 class FileModel : public QFileSystemModel

@@ -8,7 +8,6 @@
 *                Version 3, 29 June 2007
 */
 
-#include <QObject>
 #include <QDir>
 #include <QStack>
 
@@ -55,13 +54,13 @@ public:
                 bool includeSubdirs = false,
                 QDir::Filters dirFilters = QDir::Files | QDir::Hidden | QDir::System | QDir::Dirs | QDir::NoDotAndDotDot,
                 QStringList nameFilters = QStringList())
-        : dir(dir), includeSubdirs(includeSubdirs), dirFilters(dirFilters), nameFilters(nameFilters), stop(false), fileList(NULL) {}
+        : dir(dir), includeSubdirs(includeSubdirs), dirFilters(dirFilters), nameFilters(nameFilters), stop(false), fileList(new QList<FileInfoEx>()) {}
 
     FilesFinder(QString path = "",
                 bool includeSubdirs = false,
                 QDir::Filters dirFilters = QDir::Files | QDir::Hidden | QDir::System | QDir::Dirs | QDir::NoDotAndDotDot,
                 QStringList nameFilters = QStringList())
-    : includeSubdirs(includeSubdirs), dirFilters(dirFilters), nameFilters(nameFilters), stop(false), fileList(NULL)
+    : includeSubdirs(includeSubdirs), dirFilters(dirFilters), nameFilters(nameFilters), stop(false), fileList(new QList<FileInfoEx>())
     { dir = QDir(path); }
 
     ~FilesFinder();

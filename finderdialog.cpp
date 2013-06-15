@@ -18,9 +18,9 @@ FinderDialog::FinderDialog() :
     duplicatesFinder(new DuplicatesFinder()),
 
     dirTree(new DirectoryTree(this)),
-    fileList(NULL),
+    fileList(new QList<FileInfoEx>()),
 
-    ui(new Ui::FinderDialog),    
+    ui(new Ui::FinderDialog),
     size(0)
 
 {
@@ -73,11 +73,13 @@ void FinderDialog::UpdateView()
 {
     ui->progressBar->setMaximum(100); //to back from sliding to normal progress bar after files searching
     ui->pbSearch->setText("Search");
-    delete fileList;
+
+    fileList->clear();
+
     if (ui->cbDuplicatesEnbl->isChecked())
-        fileList = new QList<FileInfoEx>(duplicatesFinder->GetResult());
+        fileList->append(duplicatesFinder->GetResult());
     else
-        fileList = new QList<FileInfoEx>(filesFinder->GetResult());
+        fileList->append(filesFinder->GetResult());
 
     size = 0;
     working = true;
@@ -175,10 +177,10 @@ void FinderDialog::on_pbSearch_clicked()
         if (!dir.exists())
         {
             QMessageBox::warning(this,
-                                tr("Warning"),
-                                tr("The selected directory does not exist."),
-                                QMessageBox::Ok
-                                );
+                                 tr("Warning"),
+                                 tr("The selected directory does not exist."),
+                                 QMessageBox::Ok
+                                 );
             return;
         }
 
@@ -233,17 +235,25 @@ void FinderDialog::on_pbDeleteSelected_clicked()
                                    );
 
     if (ret == QMessageBox::Yes)
+    {
+        QFile *file = NULL;
         for (int i = 0; i < ui->twFileList->rowCount(); i++)
             if (ui->twFileList->item(i,0)->checkState() & Qt::Checked)
             {
-                QString file = (*fileList)[i].absoluteFilePath();
-                if (QFile::remove(file))
+                file = new QFile(ui->twFileList->item(i,1)->text() + '/' + ui->twFileList->item(i,0)->text());
+
+                size -= file->size();
+                if (file->remove())
                 {
                     ui->twFileList->removeRow(i);
-                    size -= (*fileList)[i].size();
-                    ui->lSFS->setText(TextFormatter<qint64>::SizeFromBytes(size));
+                    i--;
                 }
+                else size += file->size();
+
+                delete file;
             }
+        ui->lSFS->setText(TextFormatter<qint64>::SizeFromBytes(size));
+    }
 }
 
 //Simple UI actions

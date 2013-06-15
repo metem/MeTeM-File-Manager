@@ -8,8 +8,6 @@
 *                Version 3, 29 June 2007
 */
 
-#include <QColor>
-#include <QDialog>
 #include <QDateTime>
 #include <QTableWidgetItem>
 #include <QMessageBox>
@@ -17,8 +15,6 @@
 #include "duplicatesfinder.h"
 #include "textformatter.h"
 #include "directorytree.h"
-
-#include <QDebug>
 
 namespace Ui {
 class FinderDialog;

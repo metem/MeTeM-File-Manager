@@ -73,12 +73,9 @@ void DuplicatesFinder::FixID(QList<FileInfoEx> &list)
 void DuplicatesFinder::Search()
 {
     stop = false;
-    delete fileList;
 
     FilesFinder::dirFilters = QDir::Files | QDir::Hidden | QDir::System;
     FilesFinder::Search();
-
-    fileList = new QList<FileInfoEx>(FilesFinder::GetResult());
 
     if (fileList->count() > 0)
     {
@@ -110,6 +107,7 @@ void DuplicatesFinder::Search()
             if (method & DuplicatesFinder::Size) ReduceList(*fileList);
             if (fileList->count() == 0)
             {
+                emit ProgressChanged(100);
                 emit DSearchFinished();
                 return;
             }
@@ -136,6 +134,7 @@ void DuplicatesFinder::Search()
             if (method != DuplicatesFinder::Sha1) ReduceList(*fileList); //if isnt choosen ONLY sha1 then have to reduce list
             if (fileList->count() == 0)
             {
+                emit ProgressChanged(100);
                 emit DSearchFinished();
                 return;
             }
@@ -164,6 +163,10 @@ void DuplicatesFinder::Search()
 
         ReduceList(*fileList);
         FixID(*fileList);
-        emit DSearchFinished();
+
+        //TODO: files should be sorted by path and later by name/size/sha1
     }
+
+    emit ProgressChanged(100);
+    emit DSearchFinished();
 }

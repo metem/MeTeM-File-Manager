@@ -11,7 +11,6 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QDesktopServices>
-#include <QMessageBox>
 #include <QInputDialog>
 #include <QShortcut>
 

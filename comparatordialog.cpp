@@ -7,8 +7,6 @@
 
 #include "comparatordialog.h"
 #include "ui_comparatordialog.h"
-#include <QDateTime>
-#include "textformatter.h"
 
 ComparatorDialog::ComparatorDialog(QFileInfo file1, QFileInfo file2, QWidget *parent) :
     QDialog(parent),

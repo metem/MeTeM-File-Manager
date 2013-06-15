@@ -20,8 +20,8 @@ QList<FileInfoEx>& FilesFinder::GetResult()
 void FilesFinder::Search()
 {
     stop = false;
-    delete fileList;
-    fileList = new QList<FileInfoEx>();
+    fileList->clear();
+
     QStack<QString> stack;
     stack.push(dir.absolutePath());
 
@@ -43,5 +43,6 @@ void FilesFinder::Search()
             }
         }
     }
+
     emit FSearchFinished();
 }

@@ -48,14 +48,6 @@ MainWindow::MainWindow(bool createLog, QWidget *parent) :
     ui->chartDockWidget_1->setModel(filesModel[0]);
     ui->chartDockWidget_2->setModel(filesModel[1]);
 
-    /*for my purposes only (to delete before first release)
-    QString initPath = "/media/D";
-    ui->lEPath->setText(initPath);
-    ui->lEPath_2->setText(initPath);
-
-    on_lEPath_returnPressed();
-    on_lEPath_2_returnPressed();*/
-
     //Shortcuts
     scOpen = new QShortcut(QKeySequence("F3"), this);
     scMove = new QShortcut(QKeySequence("F6"), this);
@@ -205,6 +197,8 @@ void MainWindow::on_pbOpen_clicked()
 
 void MainWindow::on_pbMove_clicked()
 {
+    //TODO: Move to other thread and make copy/move dialog.
+
     QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
     QString destination;
     if (lastFocus == 0) destination = filesModel[1]->rootPath();
@@ -226,6 +220,8 @@ void MainWindow::on_pbMove_clicked()
 
 void MainWindow::on_pbCopy_clicked()
 {
+    //TODO: Move to other thread and make copy/move dialog.
+
     QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
     QString destination;
     if (lastFocus == 0) destination = filesModel[1]->rootPath();
