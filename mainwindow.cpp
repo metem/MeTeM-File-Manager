@@ -180,7 +180,7 @@ void MainWindow::on_lEPath_returnPressed()
 
 void MainWindow::on_lEPath_2_returnPressed()
 {
-    ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(ui->lEPath->text()));
+    ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(ui->lEPath_2->text()));
 }
 
 void MainWindow::on_pbOpen_clicked()
