@@ -27,7 +27,6 @@ SOURCES += \
     NightCharts/nightcharts.cpp
 
 HEADERS  += \
-    qexfile.h \
     mainwindow.h \
     textformatter.h \
     duplicatesfinder.h \

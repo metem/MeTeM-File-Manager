@@ -2,4 +2,4 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     UnitTests \
-    MeTeM_File_Manager
+    UnitTests/MeTeM_File_Manager
