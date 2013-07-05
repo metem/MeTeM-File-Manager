@@ -121,30 +121,28 @@ void MainWindow::writeLog(const QString log)
 void MainWindow::traceTo(const QModelIndex &index, int explorerID)
 {
     QFileInfo file = filesModel[explorerID]->fileInfo(index);
+    QString path = file.absoluteFilePath();
+
+#ifdef Q_OS_UNIX
+    if (path == "/..") path = "";
+#endif
 
     if (file.isReadable())
     {
         if (file.isDir())
         {
-#ifdef Q_OS_UNIX
-            if (file.absoluteFilePath() != "/") filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
-            else filesModel[explorerID]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
-#endif
-
+            if (explorerID == 0)
             {
-                if (explorerID == 0)
-                {
-                    ui->filesExplorerView->setRootIndex(filesModel[0]->setRootPath(file.absoluteFilePath()));
-                    ui->lEPath->setText(file.absoluteFilePath());
-                }
-                else
-                {
-                    ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(file.absoluteFilePath()));
-                    ui->lEPath_2->setText(file.absoluteFilePath());
-                }
+                ui->filesExplorerView->setRootIndex(filesModel[0]->setRootPath(path));
+                ui->lEPath->setText(path);
+            }
+            else
+            {
+                ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(path));
+                ui->lEPath_2->setText(path);
             }
         }
-        else QDesktopServices::openUrl(QUrl::fromLocalFile(file.absoluteFilePath()));
+        else QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     }
     else
     {
