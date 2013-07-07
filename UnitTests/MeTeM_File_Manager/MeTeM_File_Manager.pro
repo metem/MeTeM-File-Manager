@@ -11,34 +11,35 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MeTeM_File_Manager
 TEMPLATE = app
 
+RC_FILE = app.rc
 
 SOURCES += \
-    mainwindow.cpp \
     main.cpp \
     filechartdockview.cpp \
-    finderdialog.cpp \
     filesfinder.cpp \
     filemodel.cpp \
     fileinfoex.cpp \
     duplicatesfinder.cpp \
+    NightCharts/nightcharts.cpp \
+    mainwindow.cpp \
+    finderdialog.cpp \
     directorytree.cpp \
     comparatordialog.cpp \
-    aboutbox.cpp \
-    NightCharts/nightcharts.cpp
+    aboutbox.cpp
 
 HEADERS  += \
-    mainwindow.h \
     textformatter.h \
     duplicatesfinder.h \
-    finderdialog.h \
     filesfinder.h \
     filemodel.h \
     fileinfoex.h \
     filechartdockview.h \
+    NightCharts/nightcharts.h \
+    mainwindow.h \
+    finderdialog.h \
     directorytree.h \
     comparatordialog.h \
-    aboutbox.h \
-    NightCharts/nightcharts.h
+    aboutbox.h
 
 FORMS    += \
     mainwindow.ui \
@@ -50,4 +51,5 @@ FORMS    += \
 RESOURCES += \
     icons.qrc
 
-OTHER_FILES +=
+OTHER_FILES += \
+    app.rc

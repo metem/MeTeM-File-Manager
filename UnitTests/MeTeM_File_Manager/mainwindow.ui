@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icons.qrc">
+    <normaloff>:/Icons/LGPLIcons/Crystal_Clear_filesystem_folder_lin.png</normaloff>:/Icons/LGPLIcons/Crystal_Clear_filesystem_folder_lin.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
@@ -53,24 +57,103 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="tbUp_1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>22</horstretch>
+              <verstretch>22</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>\</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QToolButton" name="tbDuplicates_1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>22</horstretch>
+              <verstretch>22</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
-              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</iconset>
+              <normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_editcopy.png</normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_editcopy.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="tb_Finder_1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>22</horstretch>
+              <verstretch>22</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
-              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</iconset>
+              <normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_viewmag.png</normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_viewmag.png</iconset>
             </property>
            </widget>
           </item>
@@ -154,24 +237,103 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="tbUp_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>22</horstretch>
+              <verstretch>22</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>\</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QToolButton" name="tbDuplicates_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>22</horstretch>
+              <verstretch>22</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
-              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_editcopy.png</iconset>
+              <normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_editcopy.png</normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_editcopy.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="tb_Finder_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>22</horstretch>
+              <verstretch>22</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
-              <normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</normaloff>:/FinderIcons/LGPLIcons/Crystal_Clear_action_viewmag.png</iconset>
+              <normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_viewmag.png</normaloff>:/Icons/LGPLIcons/Crystal_Clear_action_viewmag.png</iconset>
             </property>
            </widget>
           </item>
@@ -331,7 +493,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>50</width>
+     <width>60</width>
      <height>150</height>
     </size>
    </property>
@@ -343,9 +505,6 @@
    </property>
    <property name="allowedAreas">
     <set>Qt::BottomDockWidgetArea</set>
-   </property>
-   <property name="windowTitle">
-    <string/>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -361,7 +520,7 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>50</width>
+     <width>60</width>
      <height>150</height>
     </size>
    </property>

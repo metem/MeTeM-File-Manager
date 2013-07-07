@@ -40,7 +40,7 @@ MainWindow::MainWindow(bool createLog, QWidget *parent) :
     {
         filesModel[i] = new FileModel(this);
         filesModel[i]->setFilter(QDir::Dirs | QDir::Files | QDir::NoDot);
-        filesModel[i]->setRootPath(QDir::rootPath()); //root path (for unix based '/')
+        filesModel[i]->setRootPath(""); //root path (for unix based '/')
     }
     ui->filesExplorerView->setModel(filesModel[0]);
     ui->filesExplorerView_2->setModel(filesModel[1]);
@@ -357,4 +357,16 @@ void MainWindow::on_tb_Finder_2_clicked()
 void MainWindow::on_pbAbout_clicked()
 {
     AboutBox::getInstance().show();
+}
+
+void MainWindow::on_tbUp_1_clicked()
+{
+    ui->filesExplorerView->setRootIndex(filesModel[0]->setRootPath(""));
+    ui->lEPath->setText("");
+}
+
+void MainWindow::on_tbUp_2_clicked()
+{
+    ui->filesExplorerView_2->setRootIndex(filesModel[1]->setRootPath(""));
+    ui->lEPath_2->setText("");
 }

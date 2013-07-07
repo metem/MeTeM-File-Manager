@@ -85,6 +85,10 @@ private slots:
 
     void on_pbAbout_clicked();
 
+    void on_tbUp_1_clicked();
+
+    void on_tbUp_2_clicked();
+
 private:
     //! used to figure out which file explorer is currently focused
     bool eventFilter(QObject *object, QEvent *event);

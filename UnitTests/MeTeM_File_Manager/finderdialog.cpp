@@ -242,13 +242,12 @@ void FinderDialog::on_pbDeleteSelected_clicked()
             {
                 file = new QFile(ui->twFileList->item(i,1)->text() + '/' + ui->twFileList->item(i,0)->text());
 
-                size -= file->size();
                 if (file->remove())
                 {
+                    size -= file->size();
                     ui->twFileList->removeRow(i);
                     i--;
                 }
-                else size += file->size();
 
                 delete file;
             }

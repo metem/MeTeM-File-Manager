@@ -27,6 +27,7 @@ void FileChartDockView::paintEvent(QPaintEvent* e)
     QDockWidget::paintEvent(e);
     if (model != NULL)
     {
+        this->setWindowTitle(model->rootPath());
         QDir dir = model->rootDirectory();
 
         dir.setFilter(QDir::Files | QDir::Hidden | QDir::System | QDir::NoSymLinks);
@@ -43,7 +44,7 @@ void FileChartDockView::paintEvent(QPaintEvent* e)
             PieChart.setType(Nightcharts::Pie);//{Histogramm,Pie,DPie};
             PieChart.setLegendType(Nightcharts::Vertical);//{Round,Vertical}
 
-            PieChart.setCords(10,10,this->height()-30,this->height()-30);
+            PieChart.setCords(10,25,this->height()-35,this->height()-35);
 
 
             qint64 totalSize = 0;
@@ -52,24 +53,24 @@ void FileChartDockView::paintEvent(QPaintEvent* e)
             qint64 size = 0;
 
             int colorCounter = 0;
-            if (list.size() == 1) PieChart.addPiece(list[0].suffix(), 100);
+            if (list.size() == 1) PieChart.addPiece(list[0].suffix().toLower(), 100);
             else
             {
                 float percent = 0;
                 for (int i = 0; i < list.size() - 1; i++)
                 {
-                    if (list[i].suffix() == list[i+1].suffix()) size += list[i].size();
+                    if (list[i].suffix().toLower() == list[i+1].suffix().toLower()) size += list[i].size();
                     else
                     {
                         percent = 100.0*(size+list[i].size())/totalSize;
-                        PieChart.addPiece(list[i].suffix(), percent);
+                        PieChart.addPiece(list[i].suffix().toLower(), percent);
                         size = 0;
                         colorCounter++;
                     }
                 }
 
                 percent = 100.0*(size+list.last().size())/totalSize;
-                PieChart.addPiece(list.last().suffix(), percent);
+                PieChart.addPiece(list.last().suffix().toLower(), percent);
             }
 
             PieChart.draw(&painter);
