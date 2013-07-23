@@ -11,6 +11,7 @@
 MainWindow::MainWindow(bool createLog, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    lastFocus(0),
     dlg(NULL),
     createLogFile(createLog),
     logFile(NULL),
@@ -73,6 +74,8 @@ MainWindow::MainWindow(bool createLog, QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    for (int i = 0; i < mdlgList.count(); i++) delete mdlgList[i];
+
     if ((logFile != NULL) && (logFile->isOpen())) logFile->close();
     delete scOpen;
     delete scMove;
@@ -195,48 +198,48 @@ void MainWindow::on_pbOpen_clicked()
 
 void MainWindow::on_pbMove_clicked()
 {
-    //TODO: Move to other thread and make copy/move dialog.
-
     QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
-    QString destination;
-    if (lastFocus == 0) destination = filesModel[1]->rootPath();
-    else destination = filesModel[0]->rootPath();
 
-    destination += "/";
+    QFileInfoList *fileList = new QFileInfoList();
+    for (int i = 0; i < indexes.count(); i++) fileList->append(filesModel[lastFocus]->fileInfo(indexes[i]));
 
-    QFileInfo file;
-    for (int i = 0; i < indexes.count(); ++i)
-    {
-        file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
-        if (!QFile::rename(file.absoluteFilePath(), destination + file.fileName()))
+    QDir *destination;
+    if (lastFocus == 0) destination = new QDir(filesModel[1]->rootDirectory());
+    else destination = new QDir(filesModel[0]->rootDirectory());
+
+    mdlgList.append(new MoveDialog(fileList, destination, true));
+    mdlgList.last()->show();
+
+    for (int i = 0; i < mdlgList.count(); i++)
+        if (mdlgList[i]->isVisible() == false)
         {
-            writeLog("Can't move file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
+            delete mdlgList[i];
+            mdlgList.removeAt(i);
+            i--;
         }
-        else writeLog("Moving file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
-    }
 }
 
 void MainWindow::on_pbCopy_clicked()
 {
-    //TODO: Move to other thread and make copy/move dialog.
-
     QModelIndexList indexes = getSelectedRowsIndexes(lastFocus);
-    QString destination;
-    if (lastFocus == 0) destination = filesModel[1]->rootPath();
-    else destination = filesModel[0]->rootPath();
 
-    destination += "/";
+    QFileInfoList *fileList = new QFileInfoList();
+    for (int i = 0; i < indexes.count(); i++) fileList->append(filesModel[lastFocus]->fileInfo(indexes[i]));
 
-    QFileInfo file;
-    for (int i = 0; i < indexes.count(); ++i)
-    {
-        file = filesModel[lastFocus]->fileInfo(indexes[i]).absoluteFilePath();
-        if (!QFile::copy(file.absoluteFilePath(), destination + file.fileName()))
+    QDir *destination;
+    if (lastFocus == 0) destination = new QDir(filesModel[1]->rootDirectory());
+    else destination = new QDir(filesModel[0]->rootDirectory());
+
+    mdlgList.append(new MoveDialog(fileList, destination, false));
+    mdlgList.last()->show();
+
+    for (int i = 0; i < mdlgList.count(); i++)
+        if (mdlgList[i]->isVisible() == false)
         {
-            writeLog("Can't copy file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
+            delete mdlgList[i];
+            mdlgList.removeAt(i);
+            i--;
         }
-        else writeLog("Copying file from " + file.absoluteFilePath() + " to " + destination + file.fileName());
-    }
 }
 
 void MainWindow::on_pbRemove_clicked()
@@ -309,7 +312,7 @@ void MainWindow::on_pbCompare_clicked()
 
 void MainWindow::on_pbMkdir_clicked()
 {
-    QDir dir = filesModel[lastFocus]->rootPath();
+    QDir dir = filesModel[lastFocus]->rootDirectory();
 
     bool ok;
 

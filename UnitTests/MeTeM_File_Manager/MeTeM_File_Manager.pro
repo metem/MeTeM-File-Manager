@@ -25,7 +25,9 @@ SOURCES += \
     finderdialog.cpp \
     directorytree.cpp \
     comparatordialog.cpp \
-    aboutbox.cpp
+    aboutbox.cpp \
+    movedialog.cpp \
+    filescopier.cpp
 
 HEADERS  += \
     textformatter.h \
@@ -39,14 +41,17 @@ HEADERS  += \
     finderdialog.h \
     directorytree.h \
     comparatordialog.h \
-    aboutbox.h
+    aboutbox.h \
+    movedialog.h \
+    filescopier.h
 
 FORMS    += \
     mainwindow.ui \
     finderdialog.ui \
     directorytree.ui \
     comparatordialog.ui \
-    aboutbox.ui
+    aboutbox.ui \
+    movedialog.ui
 
 RESOURCES += \
     icons.qrc

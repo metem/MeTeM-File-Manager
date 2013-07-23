@@ -23,7 +23,7 @@ class FileInfoEx : public QFileInfo
 private:
     static const qint64 BLOCK_SIZE = 1024*1024;
     QByteArray SHA1;
-    char fileID;
+    uint fileID;
 
 public:
     FileInfoEx() : QFileInfo(), fileID(0){}
@@ -33,8 +33,8 @@ public:
     FileInfoEx(const FileInfoEx & fileinfo);
     FileInfoEx(const QFileInfo & fileinfo) : QFileInfo(fileinfo), fileID(0){}
 
-    char GetID() const { return fileID; }
-    void SetID(char ID) { fileID = ID; }
+    uint GetID() const { return fileID; }
+    void SetID(uint ID) { fileID = ID; }
 
     QByteArray GetSHA1() const { return SHA1; }
 

@@ -48,8 +48,6 @@ FinderDialog::FinderDialog() :
     connect(filesFinder, SIGNAL(FSearchFinished()), filesFinderThread, SLOT(quit()));
     connect(filesFinderThread, SIGNAL(finished()), this, SLOT(UpdateView()));
     connect(filesFinderThread, SIGNAL(started()), filesFinder, SLOT(Search()));
-
-    connect(filesFinder, SIGNAL(ProgressChanged(int)), ui->progressBar, SLOT(setValue(int)));
 }
 
 FinderDialog::~FinderDialog()

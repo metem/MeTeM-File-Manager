@@ -18,6 +18,7 @@
 #include "finderdialog.h"
 #include "filemodel.h"
 #include "aboutbox.h"
+#include "movedialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -97,6 +98,7 @@ private:
     FileModel *filesModel[2];
     int lastFocus;
     ComparatorDialog *dlg;
+    QList<MoveDialog*> mdlgList;
 
     bool createLogFile;
 
